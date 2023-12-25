@@ -7,7 +7,7 @@ export const Homepage = () => {
   return (
     <>
       <Navbar />
-      {/* <LoginPage /> */}
+      <LoginPage />
       <RegisterPage />
       <Footer />
     </>

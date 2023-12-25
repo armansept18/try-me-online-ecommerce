@@ -54,7 +54,7 @@ export const LoginPage = () => {
             component="div"
             style={{ fontFamily: "Quicksand", fontWeight: "500" }}
           >
-            Keep in touch
+            Sign In
           </Typography>
           <div className="flex flex-col max-w-md w-screen gap-4">
             <TextField label="Email">Email</TextField>
@@ -81,9 +81,10 @@ export const LoginPage = () => {
               />
             </FormControl>
           </div>
-          <div className="mt-8 mb-2">
+          <div className="mt-8 mb-4">
             <StyledLoginButton variant="contained">
-              Login <Fingerprint />
+              Login &nbsp;
+              <Fingerprint />
             </StyledLoginButton>
           </div>
           <div>

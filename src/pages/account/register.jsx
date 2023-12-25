@@ -58,7 +58,7 @@ export const RegisterPage = () => {
             component="div"
             style={{ fontFamily: "Quicksand", fontWeight: "500" }}
           >
-            Join Us
+            Create Account
           </Typography>
           <div className="flex flex-col max-w-md w-screen gap-4">
             <TextField label="Fullname">Fullname</TextField>
@@ -86,10 +86,9 @@ export const RegisterPage = () => {
               />
             </FormControl>
           </div>
-          <div className="mt-8 mb-2">
+          <div className="mt-8 mb-4">
             <StyledLoginButton variant="contained">
-              Register
-              <AddReactionRounded />
+              Register&nbsp;&nbsp;<AddReactionRounded />
             </StyledLoginButton>
           </div>
           <div>
