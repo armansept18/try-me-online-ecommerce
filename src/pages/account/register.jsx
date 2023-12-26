@@ -10,6 +10,7 @@ import {
   InputAdornment,
   InputLabel,
   OutlinedInput,
+  Paper,
   TextField,
 } from "@mui/material";
 import RegisterImage from "../../public/images/bg-tower2.jpeg";
@@ -19,6 +20,7 @@ import {
   VisibilityOff,
 } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
+import { Footer } from "../../components/footer/footer";
 
 const StyledLoginButton = styled(Button)({
   backgroundColor: "#F6E6CD",
@@ -40,70 +42,104 @@ export const RegisterPage = () => {
     event.preventDefault();
   };
   return (
-    <div className="flex justify-center items-center mt-6  mb-8">
-      <Card
-        sx={{ maxWidth: 568, maxHeight: 700, height: "100vh", width: "100vw" }}
-        className="flex flex-col justify-center items-center"
+    <>
+      <Paper
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          background: "#F6E6CD",
+          maxHeight: "420px",
+          height: "100vh",
+        }}
+        elevation={0}
       >
-        <CardMedia
-          component="img"
-          style={{ maxHeight: "300px" }}
-          image={RegisterImage}
-          alt="green iguana"
-        />
-        <CardContent>
-          <Typography
-            gutterBottom
-            variant="h4"
-            component="div"
-            style={{ fontFamily: "Quicksand", fontWeight: "500" }}
+        <Card
+          sx={{
+            maxWidth: 520,
+            maxHeight: 720,
+            height: "100vh",
+            width: "100vw",
+            borderRadius: "20px",
+            marginTop: 50,
+            position: "relative",
+          }}
+          className="flex flex-col justify-center items-center"
+          elevation={20}
+        >
+          <CardMedia
+            component="img"
+            style={{ maxHeight: "300px" }}
+            image={RegisterImage}
+          />
+          <CardContent
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
           >
-            Create Account
-          </Typography>
-          <div className="flex flex-col max-w-md w-screen gap-4">
-            <TextField label="Fullname">Fullname</TextField>
-            <TextField label="Email">Email</TextField>
-            <FormControl sx={{ m: 0, width: "47ch" }} variant="outlined">
-              <InputLabel htmlFor="outlined-adornment-password">
-                Password
-              </InputLabel>
-              <OutlinedInput
-                id="outlined-adornment-password"
-                type={showPassword ? "text" : "password"}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                      edge="end"
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                }
-                label="Password"
-              />
-            </FormControl>
-          </div>
-          <div className="mt-8 mb-4">
-            <StyledLoginButton variant="contained">
-              Register&nbsp;&nbsp;<AddReactionRounded />
-            </StyledLoginButton>
-          </div>
-          <div>
-            <Button
-              style={{
-                color: "#F37725",
-                fontFamily: "Quicksand",
-                fontWeight: "400",
-              }}
+            <Typography
+              gutterBottom
+              variant="h4"
+              component="div"
+              style={{ fontFamily: "Quicksand", fontWeight: "500" }}
             >
-              Already Have An Account?
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+              Create Account
+            </Typography>
+            <div className="flex flex-col justify-center items-center max-w-md w-screen gap-4 mt-8">
+              <TextField sx={{ m: 0, width: "37ch" }} label="Fullname">
+                Fullname
+              </TextField>
+              <TextField sx={{ m: 0, width: "37ch" }} label="Email">
+                Email
+              </TextField>
+              <FormControl sx={{ m: 0, width: "37ch" }} variant="outlined">
+                <InputLabel htmlFor="outlined-adornment-password">
+                  Password
+                </InputLabel>
+                <OutlinedInput
+                  id="outlined-adornment-password"
+                  type={showPassword ? "text" : "password"}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  label="Password"
+                />
+              </FormControl>
+            </div>
+            <div className="mt-8 mb-4">
+              <StyledLoginButton variant="contained">
+                Register&nbsp;&nbsp;
+                <AddReactionRounded />
+              </StyledLoginButton>
+            </div>
+            <div>
+              <Button
+                style={{
+                  color: "#F37725",
+                  fontFamily: "Quicksand",
+                  fontWeight: "400",
+                }}
+                href="/login"
+              >
+                Already Have An Account?
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </Paper>
+      <Footer />
+    </>
   );
 };

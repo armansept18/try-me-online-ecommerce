@@ -1,6 +1,14 @@
 import { styled } from "@mui/material/styles";
-import { Button, Divider } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Divider,
+  ImageList,
+  Typography,
+} from "@mui/material";
 import Logo from "../../public/images/logo.png";
+import { Homepage } from "../../pages/home/homepage";
 
 const StyledNavButton = styled(Button)({
   fontFamily: "Quicksand",
@@ -21,36 +29,58 @@ const StyledFooterButton = styled(Button)({
 
 export const Footer = () => {
   return (
-    <>
-      <footer className="flex flex-col mr-16 ml-16">
-        <div className="flex justify-center items-center">
-          <img
-            src={Logo}
-            alt=""
-            style={{
-              maxWidth: "250px",
-              maxHeight: "84px",
-              width: "100vw",
-              height: "100vh",
-            }}
-          />
-        </div>
-        <div className="gap-8 mt-8 mb-8">
-          <StyledNavButton>Home</StyledNavButton>
-          <StyledNavButton>Products</StyledNavButton>
-          <StyledNavButton>About</StyledNavButton>
-          <StyledNavButton>Account</StyledNavButton>
-        </div>
-        <Divider variant="fullwidth" />
-        <div className="flex justify-between mt-8">
-          <p>2022 Relume. All right reserved.</p>
-          <div>
-            <StyledFooterButton>Privacy Policy</StyledFooterButton>
-            <StyledFooterButton>Terms of Service</StyledFooterButton>
-            <StyledFooterButton>Cookies Settings</StyledFooterButton>
-          </div>
-        </div>
-      </footer>
-    </>
+    <Box sx={{ marginTop: 80 }}>
+      <ImageList
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <img
+          src={Logo}
+          alt=""
+          style={{
+            maxWidth: "250px",
+            maxHeight: "84px",
+            width: "100vw",
+            height: "100vh",
+          }}
+        />
+      </ImageList>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          marginTop: "32px",
+        }}
+      >
+        <StyledNavButton href="/home">Home</StyledNavButton>
+        <StyledNavButton>Products</StyledNavButton>
+        <StyledNavButton>About</StyledNavButton>
+        <StyledNavButton>Account</StyledNavButton>
+      </Box>
+      <Box>
+        <Divider variant="middle" sx={{ marginTop: "64px" }} />
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginTop: "32px",
+          marginLeft: "16px",
+          marginRight: "16px",
+        }}
+      >
+        <Typography
+          sx={{
+            fontFamily: "Quicksand",
+          }}
+        >
+          2022 Relume. All right reserved.
+        </Typography>
+      </Box>
+    </Box>
   );
 };
