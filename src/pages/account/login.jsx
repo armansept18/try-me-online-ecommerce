@@ -36,7 +36,7 @@ export const LoginPage = () => {
     event.preventDefault();
   };
   return (
-    <div className="flex justify-center items-center mt-6  mb-8">
+    <div className="flex justify-center items-center mt-6 mb-8">
       <Card
         sx={{ maxWidth: 568, maxHeight: 640, height: "100vh", width: "100vw" }}
         className="flex flex-col justify-center items-center"

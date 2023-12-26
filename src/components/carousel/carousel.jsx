@@ -1,10 +1,112 @@
-import Carousel1 from "../../public/images/carousels/pngtree-coming-soon-wide-banner-background-picture-image_1608238.jpg";
-import Carousel2 from "../../public/images/carousels/pngtree-new-arrival-wide-banner-background-design-picture-image_1661127.jpg";
-import Carousel3 from "../../public/images/carousels/pngtree-combo-offer-wide-banner-picture-image_1608270.jpg";
-import Carousel4 from "../../public/images/carousels/pngtree-weekend-sale-wide-banner-picture-image_1661630.jpg";
+import Carousel1 from "../../public/images/carousels/carasun.jpg";
+import Carousel2 from "../../public/images/carousels/year-end-sale-shine.webp";
+import Carousel3 from "../../public/images/carousels/carasun2.jpg";
+import Carousel4 from "../../public/images/carousels/signup-femaledaily.webp";
+import SwipeableViews from "react-swipeable-views";
+import { autoPlay } from "react-swipeable-views-utils";
+import { Box, Button, MobileStepper, useTheme } from "@mui/material";
+import { useState } from "react";
+import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
 
-const imageData = [Carousel1, Carousel2, Carousel3, Carousel4];
+const AutoplayCarousels = autoPlay(SwipeableViews);
+const imageData = [
+  { image: Carousel1 },
+  { image: Carousel2 },
+  { image: Carousel3 },
+  { image: Carousel4 },
+];
 
 export const Carousel = () => {
-  return <></>;
+  const theme = useTheme();
+  const [activeStep, setActiveSet] = useState(0);
+  const maxSteps = imageData.length;
+
+  const handleNext = () => {
+    setActiveSet((step) => step + 1);
+  };
+  const handlePrev = () => {
+    setActiveSet((step) => step - 1);
+  };
+  const handleStepChange = (step) => {
+    setActiveSet(step);
+  };
+  return (
+    <div
+      className="flex flex-col justify-center items-center"
+      style={{
+        backgroundColor: "#F6E6CD",
+        maxHeight: "560px",
+        height: "100vh",
+        width: "100vw",
+      }}
+    >
+      <Box
+        sx={{
+          maxWidth: 1024,
+          flexGrow: 1,
+        }}
+        style={{ marginTop: "120px" }}
+      >
+        <AutoplayCarousels
+          axis={theme.direction === "rtl" ? "x-reverse" : "x"}
+          index={activeStep}
+          onChangeIndex={handleStepChange}
+          enableMouseEvents
+        >
+          {imageData.map((step, index) => (
+            <div key={step.label}>
+              {Math.abs(activeStep - index) <= 2 ? (
+                <Box
+                  component="img"
+                  sx={{
+                    height: 325,
+                    display: "block",
+                    maxWidth: 1024,
+                    overflow: "hidden",
+                    width: "100vw",
+                    borderRadius: "20px",
+                    aspectRatio: 1,
+                    objectFit: "fill",
+                  }}
+                  src={step.image}
+                />
+              ) : null}
+            </div>
+          ))}
+        </AutoplayCarousels>
+        <MobileStepper
+          steps={maxSteps}
+          position="static"
+          activeStep={activeStep}
+          style={{ backgroundColor: "#F6E6CD" }}
+          nextButton={
+            <Button
+              size="small"
+              onClick={handleNext}
+              disabled={activeStep === maxSteps - 1}
+            >
+              {theme.direction === "rtl" ? (
+                <KeyboardArrowLeft />
+              ) : (
+                <KeyboardArrowRight />
+              )}
+            </Button>
+          }
+          backButton={
+            <Button
+              size="small"
+              onClick={handlePrev}
+              disabled={activeStep === 0}
+            >
+              {theme.direction === "rtl" ? (
+                <KeyboardArrowRight />
+              ) : (
+                <KeyboardArrowLeft />
+              )}
+            </Button>
+          }
+        />
+      </Box>
+    </div>
+  );
 };

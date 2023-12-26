@@ -1,3 +1,4 @@
+import { Carousel } from "../../components/carousel/carousel";
 import { Footer } from "../../components/footer/footer";
 import { Navbar } from "../../components/navbar/navbar";
 import { LoginPage } from "../account/login";
@@ -7,9 +8,10 @@ export const Homepage = () => {
   return (
     <>
       <Navbar />
-      <LoginPage />
-      <RegisterPage />
-      <Footer />
+      {/* <Carousel /> */}
+      {/* <LoginPage /> */}
+      {/* <RegisterPage /> */}
+      {/* <Footer /> */}
     </>
   );
 };

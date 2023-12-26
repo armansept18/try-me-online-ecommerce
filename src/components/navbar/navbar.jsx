@@ -1,7 +1,22 @@
 import { styled } from "@mui/material/styles";
-import { Badge, Button, IconButton } from "@mui/material";
-import { ShoppingCart } from "@mui/icons-material";
+import {
+  AppBar,
+  Badge,
+  Box,
+  Button,
+  Container,
+  IconButton,
+  ImageList,
+  Menu,
+  MenuItem,
+  Toolbar,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import { AccountCircle, ShoppingCart } from "@mui/icons-material";
+import MenuIcon from "@mui/icons-material/Menu";
 import Logo from "../../public/images/logo.png";
+import { useState } from "react";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -20,34 +35,158 @@ const StyledButton = styled(Button)({
   color: "#252525",
 });
 
+const pages = ["Home", "Products", "About"];
+const account = ["Login", "Register"];
+const accountLoggedIn = ["Profile", "Order", "Address", "Logout"];
+
 export const Navbar = () => {
+  const [anchorNav, setAnchorNav] = useState(null);
+  const [anchorUser, setAnchorUser] = useState(null);
+
+  const handleOpenNav = (event) => setAnchorNav(event.currentTarget);
+  const handleCloseNav = () => setAnchorNav(null);
+  const handleOpenUser = (event) => setAnchorUser(event.currentTarget);
+  const handleCloseUser = () => setAnchorUser(null);
   return (
-    <>
-      <nav className="flex justify-between sticky top-0 mr-16 ml-16">
-        <div>
-          <img
-            src={Logo}
-            alt=""
-            style={{
-              maxWidth: "180px",
-              maxHeight: "61px",
-              width: "100vw",
-              height: "100vh",
+    <AppBar position="fixed" sx={{ backgroundColor: "transparent" }}>
+      <Container maxWidth="xl" sx={{ flexGrow: 1 }}>
+        <Toolbar disableGutters>
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleOpenNav}
+              color="inherit"
+            >
+              <MenuIcon sx={{ color: "#252525" }} />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorNav}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+              open={Boolean(anchorNav)}
+              onClose={handleCloseNav}
+              sx={{ display: { xs: "block", md: "none" } }}
+            >
+              {pages.map((page) => (
+                <MenuItem ket={page} onClick={handleCloseNav}>
+                  <Typography textAlign="center">{page}</Typography>
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box>
+          <ImageList sx={{ display: { xs: "flex", md: "none" } }}>
+            <img
+              src={Logo}
+              alt=""
+              style={{
+                maxWidth: "180px",
+                maxHeight: "61px",
+                width: "100vw",
+                height: "100vh",
+              }}
+            />
+          </ImageList>
+
+          <ImageList sx={{ display: { xs: "none", md: "flex" } }}>
+            <img
+              src={Logo}
+              alt=""
+              style={{
+                maxWidth: "180px",
+                maxHeight: "61px",
+                width: "100vw",
+                height: "100vh",
+              }}
+            />
+          </ImageList>
+          <Box
+            className="flex items-center"
+            sx={{
+              flexGrow: 1,
+              display: { xs: "none", md: "flex" },
+              justifyContent: "flex-end",
+              marginRight: 5,
+              gap: 5,
             }}
-          />
-        </div>
-        <div className="flex items-center gap-5">
-          <StyledButton>Home</StyledButton>
-          <StyledButton>Products</StyledButton>
-          <StyledButton>About</StyledButton>
-          <StyledButton>Account</StyledButton>
-          <IconButton aria-label="cart">
-            <StyledBadge badgeContent={100} color="error" max={99}>
-              <ShoppingCart />
-            </StyledBadge>
-          </IconButton>
-        </div>
-      </nav>
-    </>
+          >
+            {pages.map((page) => (
+              <StyledButton
+                key={page}
+                onClick={handleCloseNav}
+                sx={{ my: 2, color: "#252525", display: "block" }}
+              >
+                {page}
+              </StyledButton>
+            ))}
+          </Box>
+          {/* Icon */}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "25px",
+            }}
+          >
+            <Box>
+              <IconButton aria-label="cart">
+                <StyledBadge badgeContent={100} color="error" max={99}>
+                  <ShoppingCart fontSize="medium" />
+                </StyledBadge>
+              </IconButton>
+            </Box>
+            <Box sx={{ flexGrow: 0 }}>
+              <Tooltip title="Open account menu">
+                <IconButton
+                  size="large"
+                  aria-label="account-bar"
+                  aria-controls="account-bar"
+                  aria-haspopup="true"
+                  onClick={handleOpenUser}
+                  sx={{ p: 0 }}
+                >
+                  <AccountCircle fontSize="large" />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: "45px" }}
+                id="account-bar"
+                anchorEl={anchorUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorUser)}
+                onClose={handleCloseUser}
+              >
+                {accountLoggedIn.map((account) => (
+                  <MenuItem key={account} onClick={handleCloseUser}>
+                    <Typography textAlign="center" sx={{ color: "#252525" }}>
+                      {account}
+                    </Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
+          </Box>
+        </Toolbar>
+      </Container>
+    </AppBar>
   );
 };
