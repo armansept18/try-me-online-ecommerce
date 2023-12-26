@@ -31,18 +31,19 @@ export const Carousel = () => {
     setActiveSet(step);
   };
   return (
-    <div
-      className="flex flex-col justify-center items-center"
-      style={{
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
         backgroundColor: "#F6E6CD",
         maxHeight: "560px",
         height: "100vh",
-        width: "100vw",
       }}
     >
       <Box
         sx={{
-          maxWidth: 1024,
           flexGrow: 1,
         }}
         style={{ marginTop: "120px" }}
@@ -61,12 +62,11 @@ export const Carousel = () => {
                   sx={{
                     height: 325,
                     display: "block",
-                    maxWidth: 1024,
                     overflow: "hidden",
-                    width: "100vw",
+                    width: "100%",
                     borderRadius: "20px",
                     aspectRatio: 1,
-                    objectFit: "fill",
+                    objectFit: "cover",
                   }}
                   src={step.image}
                 />
@@ -107,6 +107,6 @@ export const Carousel = () => {
           }
         />
       </Box>
-    </div>
+    </Box>
   );
 };

@@ -1,14 +1,9 @@
 import { styled } from "@mui/material/styles";
-import {
-  Box,
-  Button,
-  Container,
-  Divider,
-  ImageList,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Divider, Typography } from "@mui/material";
 import Logo from "../../public/images/logo.png";
-import { Homepage } from "../../pages/home/homepage";
+import { motion } from "framer-motion";
+
+const visible = { opacity: 1, y: 0, transition: { duration: 3 } };
 
 const StyledNavButton = styled(Button)({
   fontFamily: "Quicksand",
@@ -18,26 +13,27 @@ const StyledNavButton = styled(Button)({
   letterSpacing: "0.56px",
   color: "#252525",
 });
-const StyledFooterButton = styled(Button)({
-  fontFamily: "Quicksand",
-  fontSize: "14px",
-  fontWeight: "500",
-  lineHeight: "150%",
-  letterSpacing: "0.49px",
-  color: "#252525",
-});
 
 export const Footer = () => {
   return (
     <Box sx={{ marginTop: 80 }}>
-      <ImageList
-        sx={{
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        exit={{ opacity: 0, transition: { duration: 1 } }}
+        variants={{ visible: { transition: { staggerChildren: 0.9 } } }}
+        style={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
         }}
       >
-        <img
+        <motion.img
+          variants={{
+            hidden: { opacity: 0, y: 100 },
+            visible,
+          }}
           src={Logo}
           alt=""
           style={{
@@ -47,7 +43,7 @@ export const Footer = () => {
             height: "100vh",
           }}
         />
-      </ImageList>
+      </motion.div>
       <Box
         sx={{
           display: "flex",
