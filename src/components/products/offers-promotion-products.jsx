@@ -1,5 +1,5 @@
 import { Box, Button, Paper, Typography } from "@mui/material";
-import { ProductCard } from "../card/product-card";
+import { ProductList } from "./products-list";
 
 export const OfferPromotionProducts = () => {
   return (
@@ -32,7 +32,7 @@ export const OfferPromotionProducts = () => {
           </Button>
         </Box>
       </Box>
-      <ProductCard />
+      <ProductList />
     </Paper>
   );
 };

@@ -1,4 +1,4 @@
-import { Box, Grid, Paper } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import Category1 from "../../public/images/products/77b88849a1474795d08d1c5f7b538549.jpeg";
 import { CategoryCard } from "../card/category-card";
 

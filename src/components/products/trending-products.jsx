@@ -1,5 +1,6 @@
 import { Box, Button, Paper, Typography } from "@mui/material";
 import { ProductCard } from "../card/product-card";
+import { ProductList } from "./products-list";
 
 export const TrendingProducts = () => {
   return (
@@ -32,7 +33,7 @@ export const TrendingProducts = () => {
           </Button>
         </Box>
       </Box>
-      <ProductCard />
+      <ProductList />
     </Paper>
   );
 };
