@@ -46,6 +46,7 @@ export const ProductList = () => {
         justifyContent: "center",
         alignItems: "center",
         flexWrap: "wrap",
+        marginTop: "80px",
       }}
     >
       {data.map((product) => (
