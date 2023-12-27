@@ -16,7 +16,7 @@ import {
 import { AccountCircle, ShoppingCart } from "@mui/icons-material";
 import MenuIcon from "@mui/icons-material/Menu";
 import Logo from "../../public/images/logo.png";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({

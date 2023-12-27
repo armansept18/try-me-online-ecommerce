@@ -1,15 +1,15 @@
 import { Box, Button, Paper, Typography } from "@mui/material";
-import { ProductCard } from "../card/product";
+import { ProductCard } from "../card/product-card";
 
-export const TrendingProducts = () => {
+export const OfferPromotionProducts = () => {
   return (
-    <Paper elevation={0} sx={{ marginTop: "112px" }}>
+    <Paper elevation={0} sx={{ marginTop: "134px", background: "transparent" }}>
       <Box sx={{ margin: "40px 64px 0 64px" }}>
         <Typography fontSize="16px" fontFamily="Quicksand">
-          TRENDING
+          OFFERS & PROMOTIONS
         </Typography>
         <Typography fontSize="48px" fontWeight="400" fontFamily="Russo One">
-          Trending Products
+          Offers & Promotion Products
         </Typography>
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Typography fontSize="18px" fontFamily="Quicksand">

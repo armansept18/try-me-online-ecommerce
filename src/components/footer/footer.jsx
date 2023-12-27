@@ -16,7 +16,7 @@ const StyledNavButton = styled(Button)({
 
 export const Footer = () => {
   return (
-    <Box sx={{ marginTop: 80 }}>
+    <Box sx={{ marginTop: 60 }}>
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -53,7 +53,7 @@ export const Footer = () => {
         }}
       >
         <StyledNavButton href="/home">Home</StyledNavButton>
-        <StyledNavButton>Products</StyledNavButton>
+        <StyledNavButton href="/products">Products</StyledNavButton>
         <StyledNavButton>About</StyledNavButton>
         <StyledNavButton>Account</StyledNavButton>
       </Box>
