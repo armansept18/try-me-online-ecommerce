@@ -2,6 +2,8 @@ import Carousel1 from "../../public/images/carousels/carasun.jpg";
 import Carousel2 from "../../public/images/carousels/year-end-sale-shine.webp";
 import Carousel3 from "../../public/images/carousels/carasun2.jpg";
 import Carousel4 from "../../public/images/carousels/signup-femaledaily.webp";
+import Carousel5 from "../../public/images/carousels/big-sale.jpg";
+import Carousel6 from "../../public/images/carousels/1000_F_391335517_DEvRGQQyhkJEtE5crO2PNGlWuFvxvtvz.jpg";
 import SwipeableViews from "react-swipeable-views";
 import { autoPlay } from "react-swipeable-views-utils";
 import { Box, Button, MobileStepper, useTheme } from "@mui/material";
@@ -14,6 +16,8 @@ const imageData = [
   { image: Carousel2 },
   { image: Carousel3 },
   { image: Carousel4 },
+  { image: Carousel5 },
+  { image: Carousel6 },
 ];
 
 export const Carousel = () => {
@@ -45,8 +49,13 @@ export const Carousel = () => {
       <Box
         sx={{
           flexGrow: 1,
+          marginTop: "120px",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          maxWidth: "1368px",
         }}
-        style={{ marginTop: "120px" }}
       >
         <AutoplayCarousels
           axis={theme.direction === "rtl" ? "x-reverse" : "x"}
@@ -62,11 +71,11 @@ export const Carousel = () => {
                   sx={{
                     height: 325,
                     display: "block",
-                    overflow: "hidden",
-                    width: "100%",
+                    // overflow: "hidden",
+                    width: "100vw",
                     borderRadius: "20px",
                     aspectRatio: 1,
-                    objectFit: "cover",
+                    objectFit: "fill",
                   }}
                   src={step.image}
                 />

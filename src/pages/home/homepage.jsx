@@ -1,7 +1,8 @@
 import { Carousel } from "../../components/carousel/carousel";
 import { Footer } from "../../components/footer/footer";
 import { Navbar } from "../../components/navbar/navbar";
-import { TrendingProducts } from "../../components/trending-products/trending-products";
+import { OfferPromotionProducts } from "../../components/products-sample/offers-promotion-products";
+import { TrendingProducts } from "../../components/products-sample/trending-products";
 
 export const Homepage = () => {
   return (
@@ -9,6 +10,7 @@ export const Homepage = () => {
       <Navbar />
       <Carousel />
       <TrendingProducts />
+      <OfferPromotionProducts />
       <Footer />
     </>
   );
