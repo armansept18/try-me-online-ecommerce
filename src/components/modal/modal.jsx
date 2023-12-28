@@ -7,9 +7,11 @@ import {
   DialogTitle,
   useMediaQuery,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 export const LogoutModal = ({ open, onClose }) => {
   const theme = useTheme();
+  const nav = useNavigate();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   const handleClose = () => {
@@ -18,6 +20,7 @@ export const LogoutModal = ({ open, onClose }) => {
   const handleLogout = () => {
     localStorage.removeItem("auth");
     onClose();
+    nav("/home");
     window.location.reload();
   };
   return (
