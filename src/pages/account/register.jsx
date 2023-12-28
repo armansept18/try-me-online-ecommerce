@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as Yup from "yup";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
@@ -22,6 +23,11 @@ import {
 import { styled } from "@mui/material/styles";
 import { Footer } from "../../components/footer/footer";
 import { motion } from "framer-motion";
+import YupPassword from "yup-password";
+import { useNavigate } from "react-router-dom";
+import { useFormik } from "formik";
+import { api } from "../../api/axios";
+import { types } from "../../redux/types";
 
 const visible = { opacity: 1, y: 0, transition: { duration: 1.5 } };
 
@@ -39,11 +45,42 @@ const StyledLoginButton = styled(Button)({
 });
 
 export const RegisterPage = () => {
+  YupPassword(Yup);
   const [showPassword, setShowPassword] = React.useState(false);
+  const nav = useNavigate();
+
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+  const formik = useFormik({
+    initialValues: {
+      full_name: "",
+      email: "",
+      password: "",
+    },
+    validationSchema: Yup.object().shape({
+      full_name: Yup.string().min(3).required(),
+      email: Yup.string().email().required(),
+      password: Yup.string().minLowercase(1).minUppercase(1).min(4).required(),
+    }),
+    onSubmit: async (values) => {
+      try {
+        const res = await api.post("/auth/register", values);
+        console.log("Register Submit :", res);
+        if (res.status === 200) {
+          alert("Register Success!");
+          nav("/login");
+        }
+        if (res === types.success) nav("/login");
+        alert("Register Success!");
+      } catch (err) {
+        alert("Email has been registered!");
+        console.error("Registration Failed :", err);
+      }
+    },
+  });
+
   return (
     <>
       <Paper
@@ -110,47 +147,71 @@ export const RegisterPage = () => {
                   Create Account
                 </Typography>
               </motion.div>
-              <div className="flex flex-col justify-center items-center max-w-md w-screen gap-4 mt-8">
-                <TextField sx={{ m: 0, width: "37ch" }} label="Fullname">
-                  Fullname
-                </TextField>
-                <TextField sx={{ m: 0, width: "37ch" }} label="Email">
-                  Email
-                </TextField>
-                <FormControl sx={{ m: 0, width: "37ch" }} variant="outlined">
-                  <InputLabel htmlFor="outlined-adornment-password">
-                    Password
-                  </InputLabel>
-                  <OutlinedInput
-                    id="outlined-adornment-password"
-                    type={showPassword ? "text" : "password"}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
-                          edge="end"
-                        >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                    label="Password"
-                  />
-                </FormControl>
-              </div>
-              <motion.div
-                className="mt-8 mb-4"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ type: "spring", stiffness: 400, damping: 17 }}
-              >
-                <StyledLoginButton variant="contained">
-                  Register&nbsp;&nbsp;
-                  <AddReactionRounded />
-                </StyledLoginButton>
-              </motion.div>
+              <form action="" onSubmit={formik.handleSubmit}>
+                <div className="flex flex-col justify-center items-center max-w-md w-screen gap-4 mt-8">
+                  <TextField
+                    sx={{ m: 0, width: "37ch" }}
+                    label="Fullname"
+                    name="full_name"
+                    value={formik.values.full_name}
+                    onChange={(e) => {
+                      formik.handleChange(e);
+                    }}
+                    onBlur={formik.handleBlur}
+                    required
+                  ></TextField>
+                  <TextField
+                    sx={{ m: 0, width: "37ch" }}
+                    label="Email"
+                    name="email"
+                    value={formik.values.email}
+                    onChange={(e) => {
+                      formik.handleChange(e);
+                    }}
+                    required
+                  ></TextField>
+                  <FormControl sx={{ m: 0, width: "37ch" }} variant="outlined">
+                    <InputLabel htmlFor="outlined-adornment-password">
+                      Password
+                    </InputLabel>
+                    <OutlinedInput
+                      id="outlined-adornment-password"
+                      type={showPassword ? "text" : "password"}
+                      label="Password"
+                      name="password"
+                      value={formik.values.password}
+                      onChange={(e) => {
+                        formik.handleChange(e);
+                      }}
+                      onBlur={formik.handleBlur}
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowPassword}
+                            onMouseDown={handleMouseDownPassword}
+                            edge="end"
+                          >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                    />
+                  </FormControl>
+                </div>
+
+                <motion.div
+                  className="mt-8 mb-4 flex justify-center items-center"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                >
+                  <StyledLoginButton variant="contained" type="submit">
+                    Register&nbsp;&nbsp;
+                    <AddReactionRounded />
+                  </StyledLoginButton>
+                </motion.div>
+              </form>
               <div>
                 <Button
                   style={{

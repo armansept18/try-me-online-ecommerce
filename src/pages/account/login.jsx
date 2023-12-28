@@ -26,6 +26,10 @@ import { useFormik } from "formik";
 import { userLogin } from "../../middlewares/auth-action";
 import { types } from "../../redux/types";
 import { jwtDecode } from "jwt-decode";
+import {
+  FailedLoginAlert,
+  LoginSuccessAlert,
+} from "../../components/alert/alert";
 
 const visible = { opacity: 1, y: 0, transition: { duration: 1.5 } };
 
@@ -45,12 +49,18 @@ const StyledLoginButton = styled(Button)({
 export const LoginPage = () => {
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = React.useState(false);
+  const [loginSuccessAlert, setLoginSuccessAlert] = React.useState(false);
+  const [failedLoginAlert, setFailedLoginAlert] = React.useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
   const nav = useNavigate();
 
+  const handleCloseAlerts = () => {
+    setLoginSuccessAlert(false);
+    setFailedLoginAlert(false);
+  };
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -68,14 +78,22 @@ export const LoginPage = () => {
         const result = await dispatch(userLogin(values));
         if (result === types.success) {
           nav("/home");
+          alert("Login Success!");
+          setLoginSuccessAlert(true);
+        } else {
+          alert("Wrong Email or Password!");
         }
       } catch (err) {
+        alert("Failed Login!");
         console.error("Login Failed :", err);
+        setFailedLoginAlert(true);
       }
     },
   });
   return (
     <>
+      {/* <LoginSuccessAlert open={loginSuccessAlert} onClose={handleCloseAlerts} />
+      <FailedLoginAlert open={failedLoginAlert} onClose={handleCloseAlerts} /> */}
       <Paper
         sx={{
           display: "flex",

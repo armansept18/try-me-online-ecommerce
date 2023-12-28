@@ -26,6 +26,7 @@ export const userLogin = (values) => {
       const res = await api.post("auth/login", {
         ...values,
       });
+      console.log("Login Submit :", res);
 
       const user = res.data.user;
       const token = res.data.token;

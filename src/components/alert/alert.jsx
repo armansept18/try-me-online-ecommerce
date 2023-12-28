@@ -44,19 +44,14 @@ export const NeedLoginAlert = () => {
   );
 };
 
-export const LoginSuccessAlert = () => {
-  const [state, setState] = useState({
-    open: false,
-    vertical: "top",
-    horizontal: "center",
-  });
-  const { vertical, horizontal, open } = state;
+export const LoginSuccessAlert = ({ open, onClose }) => {
   return (
     <Box>
       <Snackbar
-        anchorOrigin={{ vertical, horizontal }}
         open={open}
-        key={(vertical, horizontal)}
+        onClose={onClose}
+        autoHideDuration={3000}
+        TransitionComponent={SlideTransition}
       >
         <Alert severity="success">
           <AlertTitle>Logged in Successfully!</AlertTitle>
