@@ -1,9 +1,11 @@
 import * as React from "react";
+import * as Yup from "yup";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import {
+  Box,
   Button,
   FormControl,
   IconButton,
@@ -18,6 +20,12 @@ import { Fingerprint, Visibility, VisibilityOff } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
 import { Footer } from "../../components/footer/footer";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useFormik } from "formik";
+import { userLogin } from "../../middlewares/auth-action";
+import { types } from "../../redux/types";
+import { jwtDecode } from "jwt-decode";
 
 const visible = { opacity: 1, y: 0, transition: { duration: 1.5 } };
 
@@ -35,11 +43,37 @@ const StyledLoginButton = styled(Button)({
 });
 
 export const LoginPage = () => {
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = React.useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+  const nav = useNavigate();
+
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: Yup.object().shape({
+      email: Yup.string()
+        .email("Invalid Email Format")
+        .required("Email is required"),
+      password: Yup.string().required("Password is required"),
+    }),
+
+    onSubmit: async (values) => {
+      try {
+        const result = await dispatch(userLogin(values));
+        if (result === types.success) {
+          nav("/home");
+        }
+      } catch (err) {
+        console.error("Login Failed :", err);
+      }
+    },
+  });
   return (
     <>
       <Paper
@@ -111,44 +145,63 @@ export const LoginPage = () => {
                   Sign In
                 </Typography>
               </motion.div>
-              <div className="flex flex-col justify-center items-center max-w-md w-screen gap-4 mt-8">
-                <TextField sx={{ width: "37ch" }} label="Email">
-                  Email
-                </TextField>
-                <FormControl sx={{ m: 0, width: "37ch" }} variant="outlined">
-                  <InputLabel htmlFor="outlined-adornment-password">
-                    Password
-                  </InputLabel>
-                  <OutlinedInput
-                    id="outlined-adornment-password"
-                    type={showPassword ? "text" : "password"}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
-                          edge="end"
-                        >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                    label="Password"
-                  />
-                </FormControl>
-              </div>
-              <motion.div
-                className="mt-8 mb-4"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ type: "spring", stiffness: 400, damping: 17 }}
-              >
-                <StyledLoginButton variant="contained">
-                  Login &nbsp;
-                  <Fingerprint />
-                </StyledLoginButton>
-              </motion.div>
+              <form action="" onSubmit={formik.handleSubmit}>
+                <div className="flex flex-col justify-center items-center max-w-md w-screen gap-4 mt-8">
+                  <TextField
+                    sx={{ width: "37ch" }}
+                    label="Email"
+                    name="email"
+                    value={formik.values.email}
+                    onChange={(e) => {
+                      formik.handleChange(e);
+                    }}
+                    onBlur={formik.handleBlur}
+                    required
+                  >
+                    Email
+                  </TextField>
+                  <FormControl sx={{ m: 0, width: "37ch" }} variant="outlined">
+                    <InputLabel htmlFor="outlined-adornment-password" required>
+                      Password
+                    </InputLabel>
+                    <OutlinedInput
+                      id="outlined-adornment-password"
+                      type={showPassword ? "text" : "password"}
+                      required
+                      label="Password"
+                      name="password"
+                      value={formik.values.password}
+                      onChange={(e) => {
+                        formik.handleChange(e);
+                      }}
+                      onBlur={formik.handleBlur}
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowPassword}
+                            onMouseDown={handleMouseDownPassword}
+                            edge="end"
+                          >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                    />
+                  </FormControl>
+                </div>
+                <motion.div
+                  className="mt-8 mb-4 flex justify-center items-center"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                >
+                  <StyledLoginButton variant="contained" type="submit">
+                    Login &nbsp;
+                    <Fingerprint />
+                  </StyledLoginButton>
+                </motion.div>
+              </form>
               <div>
                 <Button
                   style={{

@@ -1,11 +1,11 @@
 import axios from "axios";
 
 export const registerUser = async (data) => {
-  return await axios.post(`${""}/auth/register`, data);
+  return await axios.post(`${process.env.PORT}/auth/register`, data);
 };
 
 export const loginUser = async (data) => {
-  return await axios.post(`${""}/auth/login`, data);
+  return await axios.post(`${process.env.PORT}/auth/login`, data);
 };
 
 export const logoutUser = async () => {

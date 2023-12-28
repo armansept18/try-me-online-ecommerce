@@ -17,6 +17,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Logo from "../../public/images/logo.png";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { LogoutModal } from "../modal/modal";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -43,6 +44,7 @@ export const Navbar = () => {
   const [anchorNav, setAnchorNav] = useState(null);
   const [anchorUser, setAnchorUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [openLogoutModal, setOpenLogoutModal] = useState(false);
   const navigate = useNavigate();
 
   const handleOpenNav = (event) => setAnchorNav(event.currentTarget);
@@ -51,9 +53,7 @@ export const Navbar = () => {
   const handleCloseUser = () => setAnchorUser(null);
 
   const handleLogout = () => {
-    localStorage.removeItem("auth");
-    setIsLoggedIn(false);
-    handleCloseUser();
+    setOpenLogoutModal(true);
   };
   const handleCartClicked = () => {
     if (isLoggedIn) {
@@ -168,6 +168,10 @@ export const Navbar = () => {
             ))}
           </Box>
           {/* Icon */}
+          <LogoutModal
+            open={openLogoutModal}
+            onClose={() => setOpenLogoutModal(false)}
+          />
           <Box
             sx={{
               display: "flex",

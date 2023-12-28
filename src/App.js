@@ -6,9 +6,26 @@ import { RegisterPage } from "./pages/account/register";
 import { ProductPage } from "./pages/products/product-page";
 import { ProductDetail } from "./pages/products/product-detail";
 import { Dashboard } from "./pages/account/dashboard";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { receiveUser } from "./middlewares/auth-action";
 // import { routes } from "./routes/index";
 
 function App() {
+  const dispatch = useDispatch();
+
+  async function dispatcher() {
+    try {
+      const token = localStorage.getItem("auth");
+      if (token) {
+        await dispatch(receiveUser());
+      }
+    } catch (err) {}
+  }
+  useEffect(() => {
+    dispatcher();
+  }, []);
+
   return (
     <>
       <Routes>
