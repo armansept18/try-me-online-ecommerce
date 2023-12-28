@@ -59,7 +59,7 @@ export const Navbar = () => {
     if (isLoggedIn) {
       navigate("/account");
     } else {
-      navigate("/login");
+      alert("You must login first!");
     }
   };
 
