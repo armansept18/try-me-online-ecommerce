@@ -5,7 +5,6 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import {
-  Box,
   Button,
   FormControl,
   IconButton,
@@ -25,11 +24,6 @@ import { useDispatch } from "react-redux";
 import { useFormik } from "formik";
 import { userLogin } from "../../middlewares/auth-action";
 import { types } from "../../redux/types";
-import { jwtDecode } from "jwt-decode";
-import {
-  FailedLoginAlert,
-  LoginSuccessAlert,
-} from "../../components/alert/alert";
 
 const visible = { opacity: 1, y: 0, transition: { duration: 1.5 } };
 

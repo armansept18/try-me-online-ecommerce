@@ -1,15 +1,25 @@
 import axios from "axios";
+import { api } from "./axios";
 
 export const getAddress = async () => {
-  const { token } = localStorage.getItem("auth")
-    ? JSON.parse(localStorage.getItem("auth"))
-    : {};
-
-  return await axios.get(`${""}/api/delivery/addressess?limit=`, {
-    headers: {
-      authorization: `Bearer ${token}`,
-    },
-  });
+  try {
+    const token = JSON.parse(localStorage.getItem("auth"));
+    console.log("Token in getAddress:", token);
+    if (!token) {
+      console.error("Token is missing");
+      return;
+    }
+    const response = await api.get(`/api/delivery-addresses`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    console.log("Response getAddress:", response);
+    return response;
+  } catch (error) {
+    console.error("Error fetching addresses in getAddress:", error);
+    throw error;
+  }
 };
 
 export const getLocation = async (location, code) => {

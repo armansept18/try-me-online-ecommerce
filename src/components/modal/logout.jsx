@@ -1,5 +1,4 @@
 import { useTheme } from "@mui/material/styles";
-import { useState } from "react";
 import {
   Button,
   Dialog,
@@ -20,20 +19,26 @@ export const LogoutModal = ({ open, onClose }) => {
   const handleLogout = () => {
     localStorage.removeItem("auth");
     onClose();
-    nav("/home");
     window.location.reload();
+    nav("/home");
   };
   return (
     <Dialog
       fullScreen={fullScreen}
       open={open}
       aria-labelledby="responsive-dialog-title"
+      fullWidth
     >
-      <DialogTitle id="responsive-dialog-title">
-        Are You Sure Want To Logged Out ?
+      <DialogTitle id="responsive-dialog-title" alignSelf="center">
+        You forgot something!
       </DialogTitle>
       <DialogActions
-        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: "12px",
+        }}
       >
         <Button
           autoFocus
@@ -41,13 +46,18 @@ export const LogoutModal = ({ open, onClose }) => {
           variant="contained"
           color="success"
         >
-          Cancel
+          Keep Searching
         </Button>
         <Button
           onClick={handleLogout}
           autoFocus
           variant="contained"
-          sx={{ backgroundColor: "#DE3D32" }}
+          sx={{
+            backgroundColor: "#DE3D32",
+            "&:hover": {
+              backgroundColor: "#c91b10",
+            },
+          }}
         >
           Logout
         </Button>

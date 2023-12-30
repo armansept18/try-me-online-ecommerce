@@ -1,109 +1,182 @@
-import { Box, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Button, Tab, Typography } from "@mui/material";
 import { Navbar } from "../../components/navbar/navbar";
 import { Footer } from "../../components/footer/footer";
-import PropTypes from "prop-types";
 import * as React from "react";
-
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`vertical-tabpanel-${index}`}
-      aria-labelledby={`vertical-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 12, maxWidth: "860px", width: "100vw" }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-};
-
-function a11yProps(index) {
-  return {
-    id: `vertical-tab-${index}`,
-    "aria-controls": `vertical-tabpanel-${index}`,
-  };
-}
+import { useDispatch, useSelector } from "react-redux";
+import TabPanel from "@mui/lab/TabPanel";
+import { TabContext, TabList } from "@mui/lab";
+import { AddAddressModal } from "../../components/modal/address";
+import { AddressList } from "../../components/profile/address-list";
+import { receiveUser } from "../../middlewares/auth-action";
+import { api } from "../../api/axios";
 
 export const Dashboard = () => {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState("1");
+  const userSelector = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const [openAddressModal, setOpenAddressModal] = React.useState(false);
+  const [userAddresses, setUserAddresses] = React.useState([]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+  const handleAddAddress = () => {
+    setOpenAddressModal(true);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("auth");
+    window.location.reload();
+  };
+  const handleDeleteAccount = async () => {
+    alert("Don't Delete Your Account!");
+  };
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem("auth");
+        if (token) {
+          await dispatch(receiveUser());
+        }
+      } catch (err) {
+        console.error("Error in fetchData: ", err);
+      }
+    };
+    fetchData();
+  }, [dispatch]);
+
+  React.useEffect(() => {
+    const fetchAddresses = async () => {
+      try {
+        const token = localStorage.getItem("auth");
+        const response = await api.get("/api/delivery-addresses", {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        });
+        const addresses = response.data.data || [];
+        console.log("Data in fetchAddress :", addresses);
+        setUserAddresses(addresses);
+      } catch (error) {
+        console.error("Error fetching user addresses in dashboard:", error);
+      }
+    };
+
+    fetchAddresses();
+  }, []);
+
   return (
     <>
       <Navbar />
+      <AddAddressModal
+        open={openAddressModal}
+        onClose={() => setOpenAddressModal(false)}
+      />
       <Box
         sx={{
-          flexGrow: 1,
-          bgcolor: "background.paper",
-          display: "flex",
-          height: 625,
-          margin: "112px 20px",
+          margin: "112px 20px 0 20px",
         }}
       >
-        <Tabs
-          orientation="vertical"
-          variant="scrollable"
-          value={value}
-          onChange={handleChange}
-          aria-label="Vertical tabs example"
-          sx={{
-            borderRight: 1,
-            borderColor: "divider",
-            maxWidth: "200px",
-            width: "100vw",
-          }}
-        >
-          <Tab
-            label="Profile"
-            {...a11yProps(0)}
-            sx={{ marginBottom: "20px" }}
-          />
-          <Tab label="Order" {...a11yProps(1)} sx={{ marginBottom: "20px" }} />
-          <Tab
-            label="Address"
-            {...a11yProps(2)}
-            sx={{ marginBottom: "10px" }}
-          />
-          <Tab label="Setting" {...a11yProps(3)} />
-        </Tabs>
-        <TabPanel value={value} index={0}>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "flex-start",
-              gap: "42px",
-            }}
-          >
-            <Typography>UID : {"3Ss3226csaoSpK" || `${""}`}</Typography>
-            <Typography>Name : {"Username" || `${""}`}</Typography>
-            <Typography>Email : {"user@mail.com" || `${""}`}</Typography>
+        <TabContext value={value}>
+          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+            <TabList onChange={handleChange} aria-label="lab API tabs example">
+              <Tab label="Profile" value="1" />
+              <Tab label="Order" value="2" />
+              <Tab label="Address" value="3" />
+              <Tab label="Setting" value="4" />
+            </TabList>
           </Box>
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          Item Two
-        </TabPanel>
-        <TabPanel value={value} index={2}>
-          Item Three
-        </TabPanel>
-        <TabPanel value={value} index={3}>
-          Item Four
-        </TabPanel>
+          <TabPanel value="1">
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "42px",
+              }}
+            >
+              <Typography variant="h5" component="h5" fontFamily="Quicksand">
+                Profile
+              </Typography>
+              <Typography fontFamily="Quicksand">
+                UID : USER-{userSelector.customer_id}
+              </Typography>
+
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Typography fontFamily="Quicksand">Name : </Typography>
+                <Typography fontFamily="Quicksand">
+                  {userSelector.full_name}
+                </Typography>
+              </Box>
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Typography fontFamily="Quicksand">Email :</Typography>
+                <Typography fontFamily="Quicksand">
+                  {userSelector.email}
+                </Typography>
+              </Box>
+            </Box>
+          </TabPanel>
+          <TabPanel value="2">
+            <Typography variant="h5" component="h5" fontFamily="Quicksand">
+              Order List
+            </Typography>
+          </TabPanel>
+          <TabPanel value="3">
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <Typography variant="h5" component="h5" fontFamily="Quicksand">
+                Address List
+              </Typography>
+              <Button
+                fontFamily="Quicksand"
+                onClick={handleAddAddress}
+                variant="contained"
+                sx={{
+                  maxWidth: "300px",
+                  width: "100vw",
+                  margin: "10px 0",
+                  alignSelf: "flex-end",
+                }}
+              >
+                Add Address
+              </Button>
+              <AddressList addresses={userAddresses} />
+            </Box>
+          </TabPanel>
+          <TabPanel value="4">
+            <Typography
+              marginBottom={4}
+              variant="h5"
+              component="h5"
+              fontFamily="Quicksand"
+            >
+              Account Setting
+            </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "",
+                gap: "8px",
+                alignitems: "center",
+              }}
+            >
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={handleDeleteAccount}
+              >
+                Delete Account
+              </Button>
+              <Button variant="contained" color="error" onClick={handleLogout}>
+                Logout
+              </Button>
+            </Box>
+          </TabPanel>
+        </TabContext>
       </Box>
       <Footer />
     </>

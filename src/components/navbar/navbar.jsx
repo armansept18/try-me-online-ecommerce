@@ -17,7 +17,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Logo from "../../public/images/logo.png";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { LogoutModal } from "../modal/modal";
+import { LogoutModal } from "../modal/logout";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -182,7 +182,7 @@ export const Navbar = () => {
           >
             <Box>
               <IconButton aria-label="cart" onClick={handleCartClicked}>
-                <StyledBadge badgeContent={100} color="error" max={99}>
+                <StyledBadge badgeContent={"0"} color="error" max={99}>
                   <ShoppingCart fontSize="medium" />
                 </StyledBadge>
               </IconButton>
