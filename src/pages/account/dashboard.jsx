@@ -72,6 +72,7 @@ export const Dashboard = () => {
       <AddAddressModal
         open={openAddressModal}
         onClose={() => setOpenAddressModal(false)}
+        setUserAddresses={setUserAddresses}
       />
       <Box
         sx={{

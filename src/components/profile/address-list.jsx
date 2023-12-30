@@ -5,6 +5,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import { Button } from "@mui/material";
 
 export const AddressList = ({ addresses }) => {
   const addressList = Array.isArray(addresses) ? addresses : [];
@@ -15,6 +16,7 @@ export const AddressList = ({ addresses }) => {
           <TableRow>
             <TableCell>Name</TableCell>
             <TableCell align="right">Address</TableCell>
+            <TableCell align="right">Options</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -29,6 +31,12 @@ export const AddressList = ({ addresses }) => {
               <TableCell align="right">
                 {row.detail}, {row.kelurahan}, {row.kecamatan}, {row.kota}{" "}
                 {row.provinsi}
+              </TableCell>
+              <TableCell align="right">
+                <Button onClick={() => console.log("edit", row)}>Edit</Button>
+                <Button onClick={() => console.log("delete", row)}>
+                  Delete
+                </Button>
               </TableCell>
             </TableRow>
           ))}

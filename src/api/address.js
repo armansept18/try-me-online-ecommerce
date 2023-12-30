@@ -33,9 +33,13 @@ export const createAddress = async (data) => {
     ? JSON.parse(localStorage.getItem("auth"))
     : {};
 
-  return await axios.post(`${""}/api/delivery-addresses`, data, {
-    headers: {
-      authorization: `Bearer ${token}`,
-    },
-  });
+  return await axios.post(
+    `${process.env.PORT || "localhost:5000"}/api/delivery-addresses`,
+    data,
+    {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    }
+  );
 };

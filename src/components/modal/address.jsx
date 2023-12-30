@@ -13,10 +13,11 @@ import {
   TextField,
 } from "@mui/material";
 import { useEffect, useState } from "react";
+import { api } from "../../api/axios";
 
-export const AddAddressModal = ({ open, onClose }) => {
-  const [name, setName] = useState("");
-  const [detail, setDetail] = useState("");
+export const AddAddressModal = ({ open, onClose, setUserAddresses }) => {
+  const [locationTag, setLocationTag] = useState("");
+  const [locationDetail, setLocationDetail] = useState("");
 
   const [selectedProvinceId, setSelectedProvinceId] = useState("");
   const [selectedCityId, setSelectedCityId] = useState("");
@@ -96,8 +97,60 @@ export const AddAddressModal = ({ open, onClose }) => {
     }
   };
 
-  const handleSaveAddress = () => {
-    console.log({ name });
+  const createAddress = async (addressData) => {
+    try {
+      const token = localStorage.getItem("auth");
+      const response = await api.post("/api/delivery-addresses", addressData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      if (response.status === 200) {
+        const responseData = response.data;
+        alert(responseData.message);
+        const newAddress = responseData.address;
+        setUserAddresses((prevAddresses) => [...prevAddresses, newAddress]);
+        console.log("Address added successfully:", responseData.address);
+      } else {
+        const errorData = response.data || {};
+        alert("Failed creating address, please try again!");
+        console.error(
+          "Failed to add address:",
+          errorData.message || "Unknown error"
+        );
+      }
+    } catch (error) {
+      console.error("Error adding address:", error);
+    }
+  };
+
+  const handleSaveAddress = async () => {
+    const selectedProvinceName = provinceOptions.find(
+      (province) => province.id === selectedProvinceId
+    )?.name;
+
+    const selectedCityName = cityOptions.find(
+      (city) => city.id === selectedCityId
+    )?.name;
+
+    const selectedDistrictName = districtOptions.find(
+      (district) => district.id === selectedDistrictId
+    )?.name;
+
+    const selectedSubdistrictName = subDistrictOptions.find(
+      (subDistrict) => subDistrict.id === selectedSubdistrictId
+    )?.name;
+    const addressData = {
+      nama: locationTag,
+      kelurahan: selectedSubdistrictName,
+      kecamatan: selectedDistrictName,
+      kota: selectedCityName,
+      provinsi: selectedProvinceName,
+      detail: locationDetail,
+    };
+    console.log("Input address data :", addressData);
+    await createAddress(addressData);
     onClose(false);
   };
 
@@ -123,8 +176,10 @@ export const AddAddressModal = ({ open, onClose }) => {
             <TextField
               label="Location Tag"
               name="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={locationTag}
+              onChange={(e) => {
+                setLocationTag(e.target.value);
+              }}
             />
           </FormControl>
           <FormControl sx={{ m: 1, minWidth: 240 }}>
@@ -206,9 +261,11 @@ export const AddAddressModal = ({ open, onClose }) => {
             <TextField
               label="Location Detail"
               name="detail"
-              value={detail}
+              value={locationDetail}
               multiline
-              onChange={(e) => setDetail(e.target.value)}
+              onChange={(e) => {
+                setLocationDetail(e.target.value);
+              }}
             />
           </FormControl>
         </Box>
