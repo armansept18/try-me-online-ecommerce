@@ -15,7 +15,12 @@ import {
 import { useEffect, useState } from "react";
 import { api } from "../../api/axios";
 
-export const AddAddressModal = ({ open, onClose, setUserAddresses }) => {
+export const AddressModal = ({
+  open,
+  onClose,
+  setUserAddresses,
+  editAddressId,
+}) => {
   const [locationTag, setLocationTag] = useState("");
   const [locationDetail, setLocationDetail] = useState("");
 
@@ -29,9 +34,37 @@ export const AddAddressModal = ({ open, onClose, setUserAddresses }) => {
   const [districtOptions, setDistrictOptions] = useState([]);
   const [subDistrictOptions, setSubDistrictOptions] = useState([]);
 
+  const [editMode, setEditMode] = useState(false);
+
   const handleClose = (event, reason) => {
     if (reason !== "backdropClick") {
       onClose(false);
+      resetForm();
+    }
+  };
+  const resetForm = () => {
+    setLocationTag("");
+    setLocationDetail("");
+    setSelectedProvinceId("");
+    setSelectedCityId("");
+    setSelectedDistrictId("");
+    setSelectedSubdistrictId("");
+    setEditMode(false);
+  };
+
+  const fetchAddresses = async () => {
+    try {
+      const token = localStorage.getItem("auth");
+      const response = await api.get("/api/delivery-addresses", {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      });
+      const addresses = response.data.data || [];
+      console.log("Data in fetchAddress :", addresses);
+      setUserAddresses(addresses);
+    } catch (error) {
+      console.error("Error fetching user addresses:", error);
     }
   };
 
@@ -102,7 +135,7 @@ export const AddAddressModal = ({ open, onClose, setUserAddresses }) => {
       const token = localStorage.getItem("auth");
       const response = await api.post("/api/delivery-addresses", addressData, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });
@@ -111,6 +144,7 @@ export const AddAddressModal = ({ open, onClose, setUserAddresses }) => {
         alert(responseData.message);
         const newAddress = responseData.address;
         setUserAddresses((prevAddresses) => [...prevAddresses, newAddress]);
+
         console.log("Address added successfully:", responseData.address);
       } else {
         const errorData = response.data || {};
@@ -125,19 +159,105 @@ export const AddAddressModal = ({ open, onClose, setUserAddresses }) => {
     }
   };
 
+  const updateAddress = async (addressId, addressData) => {
+    if (
+      !addressData.nama ||
+      !addressData.provinsi ||
+      !addressData.kota ||
+      !addressData.kecamatan ||
+      !addressData.kelurahan ||
+      !addressData.detail
+    ) {
+      alert("Please fill the fields.");
+      return;
+    }
+    try {
+      const token = localStorage.getItem("auth");
+      const res = await api.put(
+        `/api/delivery-addresses/${addressId}`,
+        addressData,
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (res.status === 200) {
+        const responseData = res.data;
+        alert("Success update address!");
+        fetchAddresses();
+      } else {
+        const errorData = res.data || {};
+        alert("Failed updating address, please try again!");
+        console.error(
+          "Failed to update address:",
+          errorData.message || "Unknown error"
+        );
+      }
+    } catch (err) {
+      console.error("Update address error :", err);
+    }
+  };
+
+  const fetchAddressDetails = async (addressId) => {
+    try {
+      const token = localStorage.getItem("auth");
+      const response = await api.get(`/api/delivery-addresses/${addressId}`, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      });
+      const addressData = response.data;
+      console.log("Fetched address details:", addressData);
+
+      if (addressData) {
+        setLocationTag(addressData.nama || "");
+        setLocationDetail(addressData.detail || "");
+        setSelectedProvinceId(addressData.provinsi || "");
+        setSelectedCityId(addressData.kota || "");
+        setSelectedDistrictId(addressData.kecamatan || "");
+        setSelectedSubdistrictId(addressData.kelurahan || "");
+
+        fetchProvinces();
+        fetchCities(addressData.provinsi);
+        fetchDistricts(addressData.kota);
+        fetchSubDistricts(addressData.kecamatan);
+      } else {
+        console.error("No data found for the given address ID: ", addressId);
+      }
+    } catch (error) {
+      console.error("Error fetching address details:", error);
+    }
+  };
+  const handleCreate = () => {
+    resetForm();
+    setEditMode(false);
+  };
+
+  const handleEdit = () => {
+    setEditMode(true);
+    fetchAddressDetails(editAddressId);
+  };
+
+  useEffect(() => {
+    if (editAddressId) {
+      handleEdit();
+    } else {
+      handleCreate();
+    }
+  }, [editAddressId]);
+
   const handleSaveAddress = async () => {
     const selectedProvinceName = provinceOptions.find(
       (province) => province.id === selectedProvinceId
     )?.name;
-
     const selectedCityName = cityOptions.find(
       (city) => city.id === selectedCityId
     )?.name;
-
     const selectedDistrictName = districtOptions.find(
       (district) => district.id === selectedDistrictId
     )?.name;
-
     const selectedSubdistrictName = subDistrictOptions.find(
       (subDistrict) => subDistrict.id === selectedSubdistrictId
     )?.name;
@@ -149,9 +269,26 @@ export const AddAddressModal = ({ open, onClose, setUserAddresses }) => {
       provinsi: selectedProvinceName,
       detail: locationDetail,
     };
-    console.log("Input address data :", addressData);
-    await createAddress(addressData);
+    if (
+      !locationTag ||
+      !selectedProvinceId ||
+      !selectedCityId ||
+      !selectedDistrictId ||
+      !selectedSubdistrictId
+    ) {
+      alert("Please fill the field!");
+      return;
+    }
+
+    if (editMode) {
+      await updateAddress(editAddressId, addressData);
+      console.log("Input update address data :", addressData);
+    } else {
+      await createAddress(addressData);
+      console.log("Input create address data :", addressData);
+    }
     onClose(false);
+    resetForm();
   };
 
   useEffect(() => {
@@ -169,7 +306,9 @@ export const AddAddressModal = ({ open, onClose, setUserAddresses }) => {
 
   return (
     <Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
-      <DialogTitle>Create Your Address</DialogTitle>
+      <DialogTitle>
+        {editMode ? "Edit Your Address" : "Create Your Address"}
+      </DialogTitle>
       <DialogContent>
         <Box component="form" sx={{ display: "flex", flexWrap: "wrap" }}>
           <FormControl sx={{ m: 1, minWidth: 495 }}>

@@ -5,7 +5,7 @@ import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import TabPanel from "@mui/lab/TabPanel";
 import { TabContext, TabList } from "@mui/lab";
-import { AddAddressModal } from "../../components/modal/address";
+import { AddressModal } from "../../components/modal/address";
 import { AddressList } from "../../components/profile/address-list";
 import { receiveUser } from "../../middlewares/auth-action";
 import { api } from "../../api/axios";
@@ -14,14 +14,11 @@ export const Dashboard = () => {
   const [value, setValue] = React.useState("1");
   const userSelector = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  const [openAddressModal, setOpenAddressModal] = React.useState(false);
+
   const [userAddresses, setUserAddresses] = React.useState([]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
-  };
-  const handleAddAddress = () => {
-    setOpenAddressModal(true);
   };
 
   const handleLogout = () => {
@@ -69,11 +66,6 @@ export const Dashboard = () => {
   return (
     <>
       <Navbar />
-      <AddAddressModal
-        open={openAddressModal}
-        onClose={() => setOpenAddressModal(false)}
-        setUserAddresses={setUserAddresses}
-      />
       <Box
         sx={{
           margin: "112px 20px 0 20px",
@@ -132,20 +124,10 @@ export const Dashboard = () => {
               <Typography variant="h5" component="h5" fontFamily="Quicksand">
                 Address List
               </Typography>
-              <Button
-                fontFamily="Quicksand"
-                onClick={handleAddAddress}
-                variant="contained"
-                sx={{
-                  maxWidth: "300px",
-                  width: "100vw",
-                  margin: "10px 0",
-                  alignSelf: "flex-end",
-                }}
-              >
-                Add Address
-              </Button>
-              <AddressList addresses={userAddresses} />
+              <AddressList
+                addresses={userAddresses}
+                setUserAddresses={setUserAddresses}
+              />
             </Box>
           </TabPanel>
           <TabPanel value="4">

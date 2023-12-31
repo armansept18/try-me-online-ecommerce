@@ -6,42 +6,109 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Button } from "@mui/material";
+import { api } from "../../api/axios";
+import { useState } from "react";
+import { AddressModal } from "../modal/address";
 
-export const AddressList = ({ addresses }) => {
+export const AddressList = ({ addresses, setUserAddresses }) => {
   const addressList = Array.isArray(addresses) ? addresses : [];
+  const [editAddressId, setEditAddressId] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  const handleCreate = () => {
+    setIsEditModalOpen(true);
+  };
+
+  const handleDelete = async (addressId) => {
+    try {
+      const token = localStorage.getItem("auth");
+      const res = await api.delete(`/api/delivery-addresses/${addressId}`, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      });
+      alert("Success delete address!");
+      setUserAddresses((prevAddr) =>
+        prevAddr.filter((addr) => addr._id !== addressId)
+      );
+    } catch (err) {
+      alert("Error delete address! Check your connection");
+      console.error("Handle delete err :", err);
+    }
+  };
+
+  const handleEdit = (addressId) => {
+    setEditAddressId(addressId);
+    setIsEditModalOpen(true);
+  };
+  //   const closeEditModal = () => {
+  //     setEditAddressId(null);
+  //     setEditAddressData(null);
+  //     setIsEditModalOpen(false);
+  //   };
+
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell align="right">Address</TableCell>
-            <TableCell align="right">Options</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {addressList.map((row) => (
-            <TableRow
-              key={row._id}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row.nama}
-              </TableCell>
-              <TableCell align="right">
-                {row.detail}, {row.kelurahan}, {row.kecamatan}, {row.kota}{" "}
-                {row.provinsi}
-              </TableCell>
-              <TableCell align="right">
-                <Button onClick={() => console.log("edit", row)}>Edit</Button>
-                <Button onClick={() => console.log("delete", row)}>
-                  Delete
-                </Button>
-              </TableCell>
+    <>
+      <Button
+        fontFamily="Quicksand"
+        onClick={handleCreate}
+        variant="contained"
+        sx={{
+          maxWidth: "300px",
+          width: "100vw",
+          margin: "10px 0",
+          alignSelf: "flex-end",
+        }}
+      >
+        Add Address
+      </Button>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell align="right">Address</TableCell>
+              <TableCell align="right">Options</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {addressList.map((row) => (
+              <TableRow
+                key={row._id}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {row.nama}
+                </TableCell>
+                <TableCell align="right">
+                  {row.detail}, {row.kelurahan}, {row.kecamatan}, {row.kota}{" "}
+                  {row.provinsi}
+                </TableCell>
+                <TableCell align="right">
+                  <Button
+                    onClick={() => {
+                      handleEdit(row._id);
+                      console.log("Edit Pressed!", row);
+                    }}
+                  >
+                    Edit
+                  </Button>
+                  <Button onClick={() => handleDelete(row._id)}>Delete</Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <AddressModal
+        open={isEditModalOpen}
+        onClose={() => {
+          setEditAddressId(null);
+          setIsEditModalOpen(false);
+        }}
+        setUserAddresses={setUserAddresses}
+        editAddressId={editAddressId}
+      />
+    </>
   );
 };

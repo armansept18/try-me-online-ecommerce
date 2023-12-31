@@ -2,13 +2,30 @@ import { Box, Paper, Typography } from "@mui/material";
 import { Footer } from "../../components/footer/footer";
 import { Navbar } from "../../components/navbar/navbar";
 import { CategoryList } from "../../components/products/category-list";
-import { SearchBar } from "../../components/search-bar/search-bar";
+import { SearchBar } from "../../components/search/search-bar";
+import { ProductList } from "../../components/products/products-list";
+import { useEffect, useState } from "react";
+import { api } from "../../api/axios";
 
 export const ProductPage = () => {
+  const [products, setProducts] = useState([]);
+
+  const fetchProduct = async () => {
+    try {
+      const response = await api.get("/api/products");
+      setProducts(response.data.data);
+    } catch (err) {
+      console.log("Error fetch products:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchProduct();
+  }, []);
+
   return (
     <>
       <Navbar />
-
       <Paper elevation={0} sx={{ background: "transparent" }}>
         <Box
           margin="112px 20px"
@@ -39,7 +56,7 @@ export const ProductPage = () => {
             </Typography>
           </Box>
           <SearchBar />
-          <CategoryList />
+          <ProductList products={[...products]} fetchProduct={fetchProduct} />
         </Box>
       </Paper>
       <Footer />
