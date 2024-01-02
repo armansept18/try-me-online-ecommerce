@@ -1,6 +1,6 @@
 import { Box, Button, Paper, Typography } from "@mui/material";
 import Product from "../../public/images/products/cosmetic.jpeg";
-import { Navbar } from "../../components/navbar/navbar";
+import { Navbar } from "../../components/navigation/navbar";
 import { Footer } from "../../components/footer/footer";
 
 export const ProductDetail = ({ product }) => {

@@ -5,15 +5,15 @@ export const ProductCard = ({ product }) => {
   if (!product) {
     return <div>Error: Product data is missing</div>;
   }
-  const { image, name, category, tags, price } = product;
+  const { image_url, name, category, tags, price } = product;
 
   return (
     <Link to={`/product-detail/${product._id}`}>
       <CardActionArea mt="80px" sx={{ borderRadius: "10px" }}>
         <Box p="12px">
           <img
-            src={image}
-            alt="Product"
+            src={`http://localhost:5000/static/${image_url}`}
+            alt={name}
             style={{
               maxWidth: "200px",
               maxHeight: "200px",
@@ -28,10 +28,10 @@ export const ProductCard = ({ product }) => {
               {`${name}` || "Product Title"}
             </Typography>
             <Typography fontFamily="Quicksand" fontSize="16px" fontWeight={400}>
-              {`${category}` || "Category #"}
+              {`${category.name}` || "Category #"}
             </Typography>
             <Typography fontFamily="Quicksand" fontSize="14px" fontWeight={400}>
-              {`${tags.join(", ")}` || "Tags"}
+              {`${tags.map((tag) => tag.name).join(", ")}` || "no tags"}
             </Typography>
             <Typography
               fontFamily="Quicksand"

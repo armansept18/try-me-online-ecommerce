@@ -1,11 +1,10 @@
 import { Box, Button, Tab, Typography } from "@mui/material";
-import { Navbar } from "../../components/navbar/navbar";
+import { Navbar } from "../../components/navigation/navbar";
 import { Footer } from "../../components/footer/footer";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import TabPanel from "@mui/lab/TabPanel";
 import { TabContext, TabList } from "@mui/lab";
-import { AddressModal } from "../../components/modal/address";
 import { AddressList } from "../../components/profile/address-list";
 import { receiveUser } from "../../middlewares/auth-action";
 import { api } from "../../api/axios";

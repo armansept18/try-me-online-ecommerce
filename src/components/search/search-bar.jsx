@@ -54,13 +54,19 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export const SearchBar = () => {
+export const SearchBar = ({ onSearch, onCategoryChange }) => {
   const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(
+    categories.length > 0 ? categories[0]._id : ""
+  );
 
   const handleCategorySelector = (e) => {
     setSelectedCategory(e.target.value);
-    console.log(e.target.value);
+    onCategoryChange(e.target.value);
+    console.log("category selector :", e.target.value);
+  };
+  const handleSearchChange = (e) => {
+    onSearch(e.target.value);
   };
 
   const fetchCategory = async () => {
@@ -79,7 +85,13 @@ export const SearchBar = () => {
   }, []);
 
   return (
-    <Box display="flex" justifyContent="center" alignItems="center">
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      maxWidth="1368px"
+      width="100%"
+    >
       <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
         <InputLabel id="demo-select-small-label">Category</InputLabel>
         <Select
@@ -106,6 +118,7 @@ export const SearchBar = () => {
         <StyledInputBase
           placeholder="Search here…"
           inputProps={{ "aria-label": "search" }}
+          onChange={handleSearchChange}
         />
       </Search>
     </Box>

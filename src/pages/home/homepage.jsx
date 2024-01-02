@@ -1,6 +1,6 @@
 import { Carousel } from "../../components/carousel/carousel";
 import { Footer } from "../../components/footer/footer";
-import { Navbar } from "../../components/navbar/navbar";
+import { Navbar } from "../../components/navigation/navbar";
 import { OfferPromotionProducts } from "../../components/products/offers-promotion-products";
 import { TrendingProducts } from "../../components/products/trending-products";
 

@@ -1,25 +1,7 @@
 import { Box, Grid } from "@mui/material";
 import { ProductCard } from "../card/product-card";
-import { useEffect, useState } from "react";
-import { api } from "../../api/axios";
 
-export const ProductList = () => {
-  const [products, setProducts] = useState([]);
-
-  const fetchProduct = async () => {
-    try {
-      const response = await api.get("/api/products");
-      console.log("fetch products response: ", response.data);
-      setProducts(response.data);
-    } catch (err) {
-      console.error("Error fetching products :", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchProduct();
-  }, []);
-
+export const ProductList = ({ products }) => {
   return (
     <Box
       sx={{
@@ -28,7 +10,9 @@ export const ProductList = () => {
         justifyContent: "center",
         alignItems: "center",
         flexWrap: "wrap",
-        marginTop: "80px",
+        maxWidth: "1368px",
+        width: "100%",
+        margin: "80px 40px",
       }}
     >
       {products.map((product) => (

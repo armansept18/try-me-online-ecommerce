@@ -1,7 +1,13 @@
 import { Box, Button, Paper, Typography } from "@mui/material";
 import { ProductList } from "./products-list";
+import { useNavigate } from "react-router-dom";
 
 export const TrendingProducts = () => {
+  const nav = useNavigate();
+
+  const handleView = () => {
+    nav("/products");
+  };
   return (
     <Paper elevation={0} sx={{ marginTop: "112px", background: "transparent" }}>
       <Box sx={{ margin: "40px 64px 0 64px" }}>
@@ -27,12 +33,13 @@ export const TrendingProducts = () => {
               fontFamily: "Quicksand",
               fontSize: "16px",
             }}
+            onClick={(e) => handleView(e.target.value)}
           >
             View All
           </Button>
         </Box>
       </Box>
-      <ProductList />
+      {/* <ProductList /> */}
     </Paper>
   );
 };
