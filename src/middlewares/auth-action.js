@@ -7,10 +7,9 @@ export const receiveUser = () => {
     try {
       const token = localStorage.getItem("auth");
       if (!token) {
-        console.error("Token is missing.");
+        console.log("Token is missing.");
         return;
       }
-      console.log("Token in auth-action:", token);
       const decodedToken = jwtDecode(token);
       if (!decodedToken || !decodedToken._id) {
         console.error("Invalid or missing 'id' in decoded token.");

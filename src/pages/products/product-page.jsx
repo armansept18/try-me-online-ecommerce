@@ -13,22 +13,38 @@ export const ProductPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [categories, setCategories] = useState([]);
 
   const fetchProduct = async (page = 1) => {
     try {
+      const params = {
+        page,
+        search: searchQuery,
+      };
+      if (selectedCategory) {
+        params.category = selectedCategory;
+      }
       const response = await api.get(`/api/products`, {
-        params: {
-          page,
-          category: selectedCategory,
-          search: searchQuery,
-        },
+        params,
       });
-      console.log("Fetch products :", response.data.data);
+      console.log(
+        "fetch product selected category productpage:",
+        selectedCategory
+      );
       setProducts(response.data.data);
       setTotalPages(response.data.totalPages);
       setCurrentPage(response.data.currentPage);
     } catch (err) {
       console.log("Error fetch products:", err);
+    }
+  };
+  const fetchCategories = async () => {
+    try {
+      const response = await api.get("/api/categories");
+      if (!response.data) throw new Error();
+      setCategories(response.data);
+    } catch (err) {
+      console.log("Error fetching category :", err);
     }
   };
 
@@ -39,6 +55,7 @@ export const ProductPage = () => {
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
+    console.log("set selected category handle category change:", category);
     fetchProduct();
   };
 
@@ -60,6 +77,7 @@ export const ProductPage = () => {
 
   useEffect(() => {
     fetchProduct();
+    fetchCategories();
   }, [selectedCategory, searchQuery]);
 
   return (
@@ -97,6 +115,8 @@ export const ProductPage = () => {
           <SearchBar
             onSearch={handleSearch}
             onCategoryChange={handleCategoryChange}
+            categories={categories}
+            selectedCategory={selectedCategory}
           />
           <ProductList products={[...products]} fetchProduct={fetchProduct} />
           <Box

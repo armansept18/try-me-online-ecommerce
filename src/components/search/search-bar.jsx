@@ -8,8 +8,8 @@ import {
 } from "@mui/material";
 import { styled, alpha } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
-import { useEffect, useState } from "react";
-import { api } from "../../api/axios";
+import { useCallback, useEffect, useState } from "react";
+import debounce from "lodash.debounce";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -54,35 +54,42 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export const SearchBar = ({ onSearch, onCategoryChange }) => {
-  const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(
-    categories.length > 0 ? categories[0]._id : ""
-  );
-
-  const handleCategorySelector = (e) => {
-    setSelectedCategory(e.target.value);
-    onCategoryChange(e.target.value);
-    console.log("category selector :", e.target.value);
-  };
-  const handleSearchChange = (e) => {
-    onSearch(e.target.value);
-  };
-
-  const fetchCategory = async () => {
-    try {
-      const response = await api.get("/api/categories");
-      if (!response.data) throw new Error();
-      console.log("After fetch category", response.data);
-      setCategories(response.data);
-    } catch (err) {
-      console.log("Error fetching category :", err);
+export const SearchBar = ({
+  onSearch,
+  onCategoryChange,
+  categories,
+  selectedCategory,
+}) => {
+  const [selectedCategoryName, setSelectedCategoryName] = useState("");
+  const getCategoryNameById = (categoryId) => {
+    const foundCategory = categories.find((cat) => cat._id === categoryId);
+    if (foundCategory) {
+      console.log("get category name by id in search bar:", foundCategory);
+      return foundCategory.name;
+    } else {
+      console.error(`Category with ID ${categoryId} not found.`);
+      return "";
     }
   };
 
-  useEffect(() => {
-    fetchCategory();
-  }, []);
+  const handleCategoryChange = (e) => {
+    const selectedCategoryId = e.target.value;
+    const selectedCategoryValue =
+      selectedCategoryId === "" ? "" : getCategoryNameById(selectedCategoryId);
+    setSelectedCategoryName(selectedCategoryId);
+    onCategoryChange(selectedCategoryValue);
+    console.log("category selector in search bar:", selectedCategoryValue);
+    console.log("selectedCategoryId:", selectedCategoryId);
+  };
+  const handleSearchChange = (e) => {
+    onSearch(e.target.value);
+    console.log("search change :", e.target.value);
+  };
+
+  const debounceChangeHandler = useCallback(
+    debounce(handleSearchChange, 1000),
+    []
+  );
 
   return (
     <Box
@@ -97,15 +104,15 @@ export const SearchBar = ({ onSearch, onCategoryChange }) => {
         <Select
           labelId="demo-select-small-label"
           id="demo-select-small"
-          value={selectedCategory}
+          value={selectedCategoryName}
           label="Category"
-          onChange={handleCategorySelector}
+          onChange={handleCategoryChange}
         >
           <MenuItem value="">
             <em>Select ...</em>
           </MenuItem>
-          {categories.map((category, idx) => (
-            <MenuItem key={idx} value={category._id}>
+          {categories.map((category) => (
+            <MenuItem key={category._id} value={category._id}>
               {category.name}
             </MenuItem>
           ))}
@@ -118,7 +125,7 @@ export const SearchBar = ({ onSearch, onCategoryChange }) => {
         <StyledInputBase
           placeholder="Search here…"
           inputProps={{ "aria-label": "search" }}
-          onChange={handleSearchChange}
+          onChange={debounceChangeHandler}
         />
       </Search>
     </Box>
