@@ -2,7 +2,7 @@ import { Box, Button, Paper, Typography } from "@mui/material";
 import { ProductList } from "./products-list";
 import { useNavigate } from "react-router-dom";
 
-export const OfferPromotionProducts = () => {
+export const NewArrivalProducts = () => {
   const nav = useNavigate();
 
   const handleView = () => {
@@ -13,10 +13,10 @@ export const OfferPromotionProducts = () => {
     <Paper elevation={0} sx={{ marginTop: "134px", background: "transparent" }}>
       <Box sx={{ margin: "40px 64px 0 64px" }}>
         <Typography fontSize="16px" fontFamily="Quicksand">
-          OFFERS & PROMOTIONS
+          NEW ARRIVALS
         </Typography>
         <Typography fontSize="48px" fontWeight="400" fontFamily="Russo One">
-          Offers & Promotion Products
+          New Arrival Products
         </Typography>
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Typography fontSize="18px" fontFamily="Quicksand">

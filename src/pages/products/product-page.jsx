@@ -6,6 +6,7 @@ import { ProductList } from "../../components/products/products-list";
 import { useEffect, useState } from "react";
 import { api } from "../../api/axios";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
+import { ProductModal } from "../../components/modal/product";
 
 export const ProductPage = () => {
   const [products, setProducts] = useState([]);
@@ -14,6 +15,7 @@ export const ProductPage = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [categories, setCategories] = useState([]);
+  const [isProductModalOpen, setIsProductModalOpen] = useState(false);
 
   const fetchProduct = async (page = 1) => {
     try {
@@ -27,10 +29,6 @@ export const ProductPage = () => {
       const response = await api.get(`/api/products`, {
         params,
       });
-      console.log(
-        "fetch product selected category productpage:",
-        selectedCategory
-      );
       setProducts(response.data.data);
       setTotalPages(response.data.totalPages);
       setCurrentPage(response.data.currentPage);
@@ -55,7 +53,6 @@ export const ProductPage = () => {
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
-    console.log("set selected category handle category change:", category);
     fetchProduct();
   };
 
@@ -73,6 +70,10 @@ export const ProductPage = () => {
     if (prevPage >= 1) {
       fetchProduct(prevPage);
     }
+  };
+
+  const toggleProductModal = () => {
+    setIsProductModalOpen(!isProductModalOpen);
   };
 
   useEffect(() => {
@@ -145,6 +146,11 @@ export const ProductPage = () => {
         </Box>
       </Paper>
       <Footer />
+      <ProductModal
+        isOpen={isProductModalOpen}
+        onClose={toggleProductModal}
+        setProducts={setProducts}
+      />
     </>
   );
 };

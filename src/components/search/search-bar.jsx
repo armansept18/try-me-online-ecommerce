@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   FormControl,
   InputBase,
   InputLabel,
@@ -10,6 +11,8 @@ import { styled, alpha } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
 import { useCallback, useEffect, useState } from "react";
 import debounce from "lodash.debounce";
+import { useSelector } from "react-redux";
+import { ProductModal } from "../modal/product";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -54,13 +57,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export const SearchBar = ({
-  onSearch,
-  onCategoryChange,
-  categories,
-  selectedCategory,
-}) => {
+export const SearchBar = ({ onSearch, onCategoryChange, categories }) => {
   const [selectedCategoryName, setSelectedCategoryName] = useState("");
+  const [productModalOpen, setProductModalOpen] = useState(false);
+  const userRole = useSelector((state) => state.auth.user?.role);
+
   const getCategoryNameById = (categoryId) => {
     const foundCategory = categories.find((cat) => cat._id === categoryId);
     if (foundCategory) {
@@ -91,43 +92,70 @@ export const SearchBar = ({
     []
   );
 
+  const toggleProductModal = () => {
+    setProductModalOpen(!productModalOpen);
+  };
+
   return (
-    <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      maxWidth="1368px"
-      width="100%"
-    >
-      <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-        <InputLabel id="demo-select-small-label">Category</InputLabel>
-        <Select
-          labelId="demo-select-small-label"
-          id="demo-select-small"
-          value={selectedCategoryName}
-          label="Category"
-          onChange={handleCategoryChange}
-        >
-          <MenuItem value="">
-            <em>Select ...</em>
-          </MenuItem>
-          {categories.map((category) => (
-            <MenuItem key={category._id} value={category._id}>
-              {category.name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <Search>
-        <SearchIconWrapper>
-          <SearchIcon />
-        </SearchIconWrapper>
-        <StyledInputBase
-          placeholder="Search here…"
-          inputProps={{ "aria-label": "search" }}
-          onChange={debounceChangeHandler}
-        />
-      </Search>
-    </Box>
+    <>
+      <Box
+        display="flex"
+        justifyContent="space-around"
+        alignItems="center"
+        maxWidth="1368px"
+        width="100%"
+      >
+        <Box display="flex" justifyContent="center" alignItems="center">
+          <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+            <InputLabel id="demo-select-small-label">Category</InputLabel>
+            <Select
+              labelId="demo-select-small-label"
+              id="demo-select-small"
+              value={selectedCategoryName}
+              label="Category"
+              onChange={handleCategoryChange}
+            >
+              <MenuItem value="">
+                <em>Select ...</em>
+              </MenuItem>
+              {categories.map((category) => (
+                <MenuItem key={category._id} value={category._id}>
+                  {category.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <Search>
+            <SearchIconWrapper>
+              <SearchIcon />
+            </SearchIconWrapper>
+            <StyledInputBase
+              placeholder="Search here…"
+              inputProps={{ "aria-label": "search" }}
+              onChange={debounceChangeHandler}
+            />
+          </Search>
+        </Box>
+        {userRole === "admin" && (
+          <Box
+            width="100vw"
+            display="flex"
+            justifyContent="flex-end"
+            alignItems="flex-end"
+            gap="12px"
+          >
+            <Button
+              variant="contained"
+              color="success"
+              onClick={toggleProductModal}
+            >
+              Add Product
+            </Button>
+            <Button variant="contained">Add Category</Button>
+          </Box>
+        )}
+      </Box>
+      <ProductModal isOpen={productModalOpen} onClose={toggleProductModal} />
+    </>
   );
 };

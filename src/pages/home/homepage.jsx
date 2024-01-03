@@ -1,7 +1,7 @@
 import { Carousel } from "../../components/carousel/carousel";
 import { Footer } from "../../components/footer/footer";
 import { Navbar } from "../../components/navigation/navbar";
-import { OfferPromotionProducts } from "../../components/products/offers-promotion-products";
+import { NewArrivalProducts } from "../../components/products/new-arrival";
 import { TrendingProducts } from "../../components/products/trending-products";
 
 export const Homepage = () => {
@@ -10,7 +10,7 @@ export const Homepage = () => {
       <Navbar />
       <Carousel />
       <TrendingProducts />
-      <OfferPromotionProducts />
+      <NewArrivalProducts />
       <Footer />
     </>
   );
