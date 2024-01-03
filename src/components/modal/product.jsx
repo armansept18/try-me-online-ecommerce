@@ -76,6 +76,13 @@ export const ProductModal = ({ isOpen, onClose, edit, setProducts }) => {
         }
       } catch (err) {
         console.log("Error add/edit product in modal product:", err);
+        if (err.response && err.response.status === 409) {
+          formik.setErrors({
+            name: "Category with the same name already exists!",
+          });
+        } else {
+          console.log("Error add category :", err);
+        }
       } finally {
         setSubmitting(false);
       }
