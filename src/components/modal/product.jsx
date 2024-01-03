@@ -75,7 +75,7 @@ export const ProductModal = ({ isOpen, onClose, edit, setProducts }) => {
           setProducts((prevState) => [...prevState, responseData]);
         }
       } catch (err) {
-        console.error("Error add/edit product in modal product:", err);
+        console.log("Error add/edit product in modal product:", err);
       } finally {
         setSubmitting(false);
       }
@@ -162,6 +162,8 @@ export const ProductModal = ({ isOpen, onClose, edit, setProducts }) => {
                 onChange={(e) => {
                   formik.handleChange(e);
                 }}
+                error={formik.touched.name && Boolean(formik.errors.name)}
+                helperText={formik.touched.name && formik.errors.name}
                 required
               />
             </FormControl>
@@ -173,6 +175,8 @@ export const ProductModal = ({ isOpen, onClose, edit, setProducts }) => {
                 onChange={(e) => {
                   formik.handleChange(e);
                 }}
+                error={formik.touched.price && Boolean(formik.errors.price)}
+                helperText={formik.touched.price && formik.errors.price}
                 required
               />
             </FormControl>
@@ -184,6 +188,10 @@ export const ProductModal = ({ isOpen, onClose, edit, setProducts }) => {
                 onChange={(e) => {
                   formik.handleChange(e);
                 }}
+                error={
+                  formik.touched.category && Boolean(formik.errors.category)
+                }
+                helperText={formik.touched.category && formik.errors.category}
                 required
               />
             </FormControl>
@@ -196,6 +204,8 @@ export const ProductModal = ({ isOpen, onClose, edit, setProducts }) => {
                 onChange={(e) => {
                   formik.handleChange(e);
                 }}
+                error={formik.touched.tags && Boolean(formik.errors.tags)}
+                helperText={formik.touched.tags && formik.errors.tags}
               />
             </FormControl>
 
@@ -207,6 +217,13 @@ export const ProductModal = ({ isOpen, onClose, edit, setProducts }) => {
                 onChange={(e) => {
                   formik.handleChange(e);
                 }}
+                error={
+                  formik.touched.description &&
+                  Boolean(formik.errors.description)
+                }
+                helperText={
+                  formik.touched.description && formik.errors.description
+                }
                 multiline
               />
             </FormControl>

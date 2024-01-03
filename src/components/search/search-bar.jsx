@@ -13,6 +13,7 @@ import { useCallback, useEffect, useState } from "react";
 import debounce from "lodash.debounce";
 import { useSelector } from "react-redux";
 import { ProductModal } from "../modal/product";
+import { CategoryModal } from "../modal/category";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -57,9 +58,15 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export const SearchBar = ({ onSearch, onCategoryChange, categories }) => {
+export const SearchBar = ({
+  onSearch,
+  onCategoryChange,
+  categories,
+  onCategoryAdded,
+}) => {
   const [selectedCategoryName, setSelectedCategoryName] = useState("");
   const [productModalOpen, setProductModalOpen] = useState(false);
+  const [categoryModalOpen, setCategoryModalOpen] = useState(false);
   const userRole = useSelector((state) => state.auth.user?.role);
 
   const getCategoryNameById = (categoryId) => {
@@ -96,6 +103,9 @@ export const SearchBar = ({ onSearch, onCategoryChange, categories }) => {
     setProductModalOpen(!productModalOpen);
   };
 
+  const toggleCategoryModal = () => {
+    setCategoryModalOpen(!categoryModalOpen);
+  };
   return (
     <>
       <Box
@@ -146,16 +156,43 @@ export const SearchBar = ({ onSearch, onCategoryChange, categories }) => {
           >
             <Button
               variant="contained"
-              color="success"
+              sx={{
+                backgroundColor: "#F6E6CD",
+                color: "#252525",
+                fontFamily: "Quicksand",
+                fontWeight: 700,
+                "&:hover": {
+                  backgroundColor: "#FFC38D",
+                },
+              }}
               onClick={toggleProductModal}
             >
               Add Product
             </Button>
-            <Button variant="contained">Add Category</Button>
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "#F6E6CD",
+                color: "#252525",
+                fontFamily: "Quicksand",
+                fontWeight: 700,
+                "&:hover": {
+                  backgroundColor: "#FFC38D",
+                },
+              }}
+              onClick={toggleCategoryModal}
+            >
+              Add Category
+            </Button>
           </Box>
         )}
       </Box>
       <ProductModal isOpen={productModalOpen} onClose={toggleProductModal} />
+      <CategoryModal
+        isOpen={categoryModalOpen}
+        onClose={toggleCategoryModal}
+        onCategoryAdded={onCategoryAdded}
+      />
     </>
   );
 };

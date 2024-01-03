@@ -167,6 +167,8 @@ export const LoginPage = () => {
                     onChange={(e) => {
                       formik.handleChange(e);
                     }}
+                    error={formik.touched.email && Boolean(formik.errors.email)}
+                    helperText={formik.touched.email && formik.errors.email}
                     onBlur={formik.handleBlur}
                     required
                   >
@@ -186,6 +188,13 @@ export const LoginPage = () => {
                       onChange={(e) => {
                         formik.handleChange(e);
                       }}
+                      error={
+                        formik.touched.password &&
+                        Boolean(formik.errors.password)
+                      }
+                      helperText={
+                        formik.touched.password && formik.errors.password
+                      }
                       onBlur={formik.handleBlur}
                       endAdornment={
                         <InputAdornment position="end">

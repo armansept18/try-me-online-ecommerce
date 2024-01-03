@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { api } from "../../api/axios";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import { ProductModal } from "../../components/modal/product";
+import { CategoryModal } from "../../components/modal/category";
 
 export const ProductPage = () => {
   const [products, setProducts] = useState([]);
@@ -16,6 +17,7 @@ export const ProductPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [categories, setCategories] = useState([]);
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
+  const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
 
   const fetchProduct = async (page = 1) => {
     try {
@@ -74,6 +76,14 @@ export const ProductPage = () => {
 
   const toggleProductModal = () => {
     setIsProductModalOpen(!isProductModalOpen);
+  };
+
+  const toggleCategoryModal = () => {
+    setIsCategoryModalOpen(!isCategoryModalOpen);
+  };
+
+  const handleCategoryAdded = (newCategory) => {
+    setCategories((prevCategories) => [...prevCategories, newCategory]);
   };
 
   useEffect(() => {
@@ -150,6 +160,11 @@ export const ProductPage = () => {
         isOpen={isProductModalOpen}
         onClose={toggleProductModal}
         setProducts={setProducts}
+      />
+      <CategoryModal
+        isOpen={isCategoryModalOpen}
+        onClose={toggleCategoryModal}
+        onCategoryAdded={handleCategoryAdded}
       />
     </>
   );
