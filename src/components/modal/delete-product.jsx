@@ -1,14 +1,15 @@
-import { useTheme } from "@mui/material/styles";
 import {
   Button,
   Dialog,
   DialogActions,
   DialogTitle,
   useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { api } from "../../api/axios";
 
-export const LogoutModal = ({ open, onClose }) => {
+export const DeleteProductModal = ({ open, onClose, productId }) => {
   const theme = useTheme();
   const nav = useNavigate();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
@@ -16,11 +17,23 @@ export const LogoutModal = ({ open, onClose }) => {
   const handleClose = () => {
     onClose();
   };
-  const handleLogout = () => {
-    localStorage.removeItem("auth");
-    onClose();
-    window.location.reload();
-    nav("/home");
+
+  const handleDelete = async () => {
+    try {
+      console.log("handle delete product id :", productId);
+      const productIdString = String(productId);
+      console.log("product id string :", productIdString);
+      const token = localStorage.getItem("auth");
+      const response = await api.delete(`/api/products/${productIdString}`, {
+        headers: { authorization: `Bearer ${token}` },
+      });
+      console.log("handle delete :", response);
+      alert("Product Deleted!");
+
+      nav("/products");
+    } catch (err) {
+      console.error("Error deleting product : ", err);
+    }
   };
   return (
     <Dialog
@@ -35,7 +48,7 @@ export const LogoutModal = ({ open, onClose }) => {
         fontFamily="Quicksand"
         fontWeight="700"
       >
-        You forgot something!
+        Are you sure?
       </DialogTitle>
       <DialogActions
         sx={{
@@ -60,10 +73,10 @@ export const LogoutModal = ({ open, onClose }) => {
             },
           }}
         >
-          Keep Searching
+          Cancel
         </Button>
         <Button
-          onClick={handleLogout}
+          onClick={handleDelete}
           autoFocus
           variant="outlined"
           color="error"
@@ -77,7 +90,7 @@ export const LogoutModal = ({ open, onClose }) => {
             },
           }}
         >
-          Logout
+          Delete
         </Button>
       </DialogActions>
     </Dialog>

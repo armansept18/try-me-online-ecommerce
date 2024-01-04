@@ -5,17 +5,23 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import Product from "../../public/images/products/cosmetic.jpeg";
 import { Navbar } from "../../components/navigation/navbar";
 import { Footer } from "../../components/footer/footer";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { api } from "../../api/axios";
 import { useEffect, useState } from "react";
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import { useSelector } from "react-redux";
+import { DeleteProductModal } from "../../components/modal/delete-product";
 
 export const ProductDetail = () => {
+  const nav = useNavigate();
   const { productId } = useParams();
   const [productDetails, setProductDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const userRole = useSelector((state) => state.auth.user?.role);
 
   const fetchProductDetail = async () => {
     try {
@@ -27,6 +33,13 @@ export const ProductDetail = () => {
       setIsLoading(false);
     }
   };
+
+  const handleUpdate = async () => {};
+
+  const handleDelete = () => {
+    setOpenDeleteModal(true);
+  };
+
   useEffect(() => {
     fetchProductDetail();
   }, [productId]);
@@ -38,6 +51,11 @@ export const ProductDetail = () => {
   return (
     <>
       <Navbar />
+      <DeleteProductModal
+        open={openDeleteModal}
+        onClose={() => setOpenDeleteModal(false)}
+        productId={productId}
+      />
       <Paper
         sx={{
           display: "flex",
@@ -53,6 +71,7 @@ export const ProductDetail = () => {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "flex-start",
+            flexWrap: "wrap",
             gap: "80px",
           }}
         >
@@ -61,10 +80,11 @@ export const ProductDetail = () => {
             alt="Product Detail"
             style={{
               borderRadius: "10px",
+              boxShadow: "8px 12px 20px -2px rgba(0,0,0, 2)",
               maxHeight: "568px",
-              height: "100vh",
-              maxWidth: "498px",
-              width: "100vw",
+              height: "auto",
+              maxWidth: "360px",
+              width: "100%",
               aspectRatio: 1,
               objectFit: "fill",
             }}
@@ -90,6 +110,30 @@ export const ProductDetail = () => {
               {productDetails.description ||
                 "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptateaut perspiciatis beatae non eum! Veritatis dicta ad, obcaecati accusantium, aperiam illo debitis, eius sed sequi temporibus praesentium sit illum atque!"}
             </Typography>
+            {userRole === "admin" && (
+              <Box display="flex" justifyContent="end" gap={2}>
+                <SettingsOutlinedIcon
+                  sx={{
+                    cursor: "pointer",
+                    "&:hover": {
+                      transition: "transform  2s",
+                      transform: "rotate(360deg)",
+                    },
+                  }}
+                />
+                <DeleteOutlineOutlinedIcon
+                  sx={{
+                    cursor: "pointer",
+                    "&:hover": {
+                      transition: "transform 0.5s",
+                      transform: "rotate(20deg)",
+                    },
+                  }}
+                  onClick={() => handleDelete()}
+                />
+              </Box>
+            )}
+
             <Button
               variant="contained"
               fullWidth
