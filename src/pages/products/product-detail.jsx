@@ -14,6 +14,7 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { useSelector } from "react-redux";
 import { DeleteProductModal } from "../../components/modal/delete-product";
+import { ProductModal } from "../../components/modal/product";
 
 export const ProductDetail = () => {
   const nav = useNavigate();
@@ -21,6 +22,7 @@ export const ProductDetail = () => {
   const [productDetails, setProductDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [openProductModal, setOpenProductModal] = useState(false);
   const userRole = useSelector((state) => state.auth.user?.role);
 
   const fetchProductDetail = async () => {
@@ -34,7 +36,9 @@ export const ProductDetail = () => {
     }
   };
 
-  const handleUpdate = async () => {};
+  const handleUpdate = () => {
+    setOpenProductModal(true);
+  };
 
   const handleDelete = () => {
     setOpenDeleteModal(true);
@@ -55,6 +59,11 @@ export const ProductDetail = () => {
         open={openDeleteModal}
         onClose={() => setOpenDeleteModal(false)}
         productId={productId}
+      />
+      <ProductModal
+        isOpen={openProductModal}
+        onClose={() => setOpenProductModal(false)}
+        edit={productDetails}
       />
       <Paper
         sx={{
@@ -120,6 +129,7 @@ export const ProductDetail = () => {
                       transform: "rotate(360deg)",
                     },
                   }}
+                  onClick={() => handleUpdate()}
                 />
                 <DeleteOutlineOutlinedIcon
                   sx={{

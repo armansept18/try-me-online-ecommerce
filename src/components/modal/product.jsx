@@ -13,7 +13,6 @@ import {
   DialogTitle,
   FormControl,
   FormLabel,
-  Input,
   TextField,
   Typography,
 } from "@mui/material";
@@ -21,9 +20,10 @@ import {
 export const ProductModal = ({ isOpen, onClose, edit, setProducts }) => {
   const fileInputRef = useRef();
   const [previewImage, setPreviewImage] = useState({});
+
   const formik = useFormik({
     initialValues: {
-      image: edit?.image || "",
+      image: edit?.image_url || "",
       name: edit?.name || "",
       price: edit?.price || 0,
       description: edit?.description || "",
@@ -72,6 +72,7 @@ export const ProductModal = ({ isOpen, onClose, edit, setProducts }) => {
           const action = edit ? "updated" : "added";
           alert(`Product ${action} with name: ${responseData.name}`);
           onClose();
+          window.location.reload();
           setProducts((prevState) => [...prevState, responseData]);
         }
       } catch (err) {
@@ -100,18 +101,35 @@ export const ProductModal = ({ isOpen, onClose, edit, setProducts }) => {
   };
 
   useEffect(() => {
-    formik.resetForm();
+    // formik.resetForm();
+    formik.setValues({
+      image: edit?.image_url || "",
+      name: edit?.name || "",
+      price: edit?.price || 0,
+      description: edit?.description || "",
+      category: edit?.category || "",
+      tags: edit?.tags || "",
+    });
+
     setPreviewImage(
-      edit?.image ? `http://localhost:5000/static/` + edit?.image : defaultImage
+      edit?.image_url
+        ? `http://localhost:5000/static/` + edit?.image_url
+        : defaultImage
     );
-    console.log("Edit image url :", edit?.image);
-  }, [isOpen, edit]);
+    console.log("Edit image url :", edit?.image_url);
+    console.log("Edit category name :", edit?.category);
+    console.log("Edit tags name :", edit?.tags);
+  }, [isOpen, edit, formik.setValues]);
 
   return (
     <Dialog
       open={isOpen}
       onClose={onClose}
-      sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
     >
       <form action="" onSubmit={formik.handleSubmit}>
         <DialogTitle sx={{ alignSelf: "center" }}>
