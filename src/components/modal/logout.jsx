@@ -43,19 +43,32 @@ export const LogoutModal = ({ open, onClose }) => {
         <Button
           autoFocus
           onClick={handleClose}
-          variant="contained"
-          color="success"
+          variant="outlined"
+          sx={{
+            color: "#252525",
+            fontFamily: "Quicksand",
+            fontWeight: 700,
+            border: "1px solid #F6E6CD",
+            "&:hover": {
+              border: "1px solid #F6E6CD",
+              backgroundColor: "#F6E6CD",
+            },
+          }}
         >
           Keep Searching
         </Button>
         <Button
           onClick={handleLogout}
           autoFocus
-          variant="contained"
+          variant="outlined"
+          color="error"
           sx={{
-            backgroundColor: "#DE3D32",
+            color: "#252525",
+            fontFamily: "Quicksand",
+            fontWeight: 700,
             "&:hover": {
-              backgroundColor: "#c91b10",
+              backgroundColor: "#F22222",
+              color: "#f5f5f5",
             },
           }}
         >

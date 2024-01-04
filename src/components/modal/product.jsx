@@ -237,8 +237,32 @@ export const ProductModal = ({ isOpen, onClose, edit, setProducts }) => {
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose}>Cancel</Button>
-          <Button type="submit">Save</Button>
+          <Button
+            sx={{
+              color: "#252525",
+              fontFamily: "Quicksand",
+              fontWeight: 700,
+              "&:hover": {
+                backgroundColor: "#F6E6CD",
+              },
+            }}
+            onClick={onClose}
+          >
+            Cancel
+          </Button>
+          <Button
+            sx={{
+              color: "#252525",
+              fontFamily: "Quicksand",
+              fontWeight: 700,
+              "&:hover": {
+                backgroundColor: "#F6E6CD",
+              },
+            }}
+            type="submit"
+          >
+            Save
+          </Button>
         </DialogActions>
       </form>
     </Dialog>

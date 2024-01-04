@@ -41,11 +41,6 @@ export const AddressList = ({ addresses, setUserAddresses }) => {
     setEditAddressId(addressId);
     setIsEditModalOpen(true);
   };
-  //   const closeEditModal = () => {
-  //     setEditAddressId(null);
-  //     setEditAddressData(null);
-  //     setIsEditModalOpen(false);
-  //   };
 
   return (
     <>
@@ -54,13 +49,20 @@ export const AddressList = ({ addresses, setUserAddresses }) => {
         onClick={handleCreate}
         variant="contained"
         sx={{
-          maxWidth: "300px",
+          maxWidth: "180px",
           width: "100vw",
           margin: "10px 0",
           alignSelf: "flex-end",
+          color: "#252525",
+          backgroundColor: "#F6E6CD",
+          fontFamily: "Quicksand",
+          fontWeight: 700,
+          "&:hover": {
+            backgroundColor: "#FFD48A",
+          },
         }}
       >
-        Add Address
+        + Add Address
       </Button>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
@@ -86,6 +88,11 @@ export const AddressList = ({ addresses, setUserAddresses }) => {
                 </TableCell>
                 <TableCell align="right">
                   <Button
+                    sx={{
+                      color: "#252525",
+                      fontFamily: "Quicksand",
+                      fontWeight: 700,
+                    }}
                     onClick={() => {
                       handleEdit(row._id);
                       console.log("Edit Pressed!", row);
@@ -93,7 +100,16 @@ export const AddressList = ({ addresses, setUserAddresses }) => {
                   >
                     Edit
                   </Button>
-                  <Button onClick={() => handleDelete(row._id)}>Delete</Button>
+                  <Button
+                    sx={{
+                      color: "#252525",
+                      fontFamily: "Quicksand",
+                      fontWeight: 700,
+                    }}
+                    onClick={() => handleDelete(row._id)}
+                  >
+                    Delete
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}

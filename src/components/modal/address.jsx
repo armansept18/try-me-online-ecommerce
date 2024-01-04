@@ -410,8 +410,32 @@ export const AddressModal = ({
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleSaveAddress}>Save</Button>
+        <Button
+          sx={{
+            color: "#252525",
+            fontFamily: "Quicksand",
+            fontWeight: 700,
+            "&:hover": {
+              backgroundColor: "#F6E6CD",
+            },
+          }}
+          onClick={handleClose}
+        >
+          Cancel
+        </Button>
+        <Button
+          sx={{
+            color: "#252525",
+            fontFamily: "Quicksand",
+            fontWeight: 700,
+            "&:hover": {
+              backgroundColor: "#F6E6CD",
+            },
+          }}
+          onClick={handleSaveAddress}
+        >
+          Save
+        </Button>
       </DialogActions>
     </Dialog>
   );

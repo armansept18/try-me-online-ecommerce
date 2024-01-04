@@ -167,7 +167,7 @@ export const SearchBar = ({
               }}
               onClick={toggleProductModal}
             >
-              Add Product
+              + Add Product
             </Button>
             <Button
               variant="contained"
@@ -182,7 +182,7 @@ export const SearchBar = ({
               }}
               onClick={toggleCategoryModal}
             >
-              Add Category
+              + Add Category
             </Button>
           </Box>
         )}

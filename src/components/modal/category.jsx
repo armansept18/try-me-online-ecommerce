@@ -70,8 +70,32 @@ export const CategoryModal = ({ isOpen, onClose, onCategoryAdded }) => {
             />
           </FormControl>
           <DialogActions>
-            <Button onClick={onClose}>Cancel</Button>
-            <Button type="submit">Save</Button>
+            <Button
+              onClick={onClose}
+              sx={{
+                color: "#252525",
+                fontFamily: "Quicksand",
+                fontWeight: 700,
+                "&:hover": {
+                  backgroundColor: "#F6E6CD",
+                },
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              sx={{
+                color: "#252525",
+                fontFamily: "Quicksand",
+                fontWeight: 700,
+                "&:hover": {
+                  backgroundColor: "#F6E6CD",
+                },
+              }}
+            >
+              Save
+            </Button>
           </DialogActions>
         </form>
       </DialogContent>
