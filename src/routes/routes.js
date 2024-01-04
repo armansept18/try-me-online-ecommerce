@@ -23,7 +23,7 @@ export const routes = [
   new RouteClass("register", <RegisterPage />, false, true),
   new RouteClass("home", <Homepage />),
   new RouteClass("products", <ProductPage />),
-  new RouteClass("product-detail", <ProductDetail />),
+  new RouteClass("product-detail/:productId", <ProductDetail />),
   new RouteClass("account", <Dashboard />, true, false),
   new RouteClass("*", <Redirect />),
 ];

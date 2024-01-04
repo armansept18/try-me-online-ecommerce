@@ -1,10 +1,40 @@
-import { Box, Button, Paper, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Paper,
+  Typography,
+} from "@mui/material";
 import Product from "../../public/images/products/cosmetic.jpeg";
 import { Navbar } from "../../components/navigation/navbar";
 import { Footer } from "../../components/footer/footer";
+import { useParams } from "react-router-dom";
+import { api } from "../../api/axios";
+import { useEffect, useState } from "react";
 
-export const ProductDetail = ({ product }) => {
-  //   const { image, name, category, tags, price, description } = product;
+export const ProductDetail = () => {
+  const { productId } = useParams();
+  const [productDetails, setProductDetails] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const fetchProductDetail = async () => {
+    try {
+      const response = await api.get(`/api/products/${productId}`);
+      setProductDetails(response.data.product);
+    } catch (err) {
+      console.log("Error fetching event details :", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchProductDetail();
+  }, [productId]);
+
+  if (isLoading) {
+    return <CircularProgress />;
+  }
+
   return (
     <>
       <Navbar />
@@ -27,7 +57,7 @@ export const ProductDetail = ({ product }) => {
           }}
         >
           <img
-            src={Product}
+            src={`http://localhost:5000/static/${productDetails.image_url}`}
             alt="Product Detail"
             style={{
               borderRadius: "10px",
@@ -41,7 +71,7 @@ export const ProductDetail = ({ product }) => {
           />
           <Box maxWidth="616px">
             <Typography fontFamily="Quicksand" fontSize="40px" fontWeight="700">
-              {"Product name"}
+              {productDetails.name || "Product Name"}
             </Typography>
             <Typography
               marginTop="8px"
@@ -49,7 +79,7 @@ export const ProductDetail = ({ product }) => {
               fontSize="24px"
               fontWeight="700"
             >
-              IDR {25000}
+              IDR {Number(productDetails.price).toLocaleString("id-ID")}
             </Typography>
             <Typography
               fontFamily="Quicksand"
@@ -57,9 +87,8 @@ export const ProductDetail = ({ product }) => {
               fontWeight="500"
               marginTop="24px"
             >
-              {
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptateaut perspiciatis beatae non eum! Veritatis dicta ad, obcaecati accusantium, aperiam illo debitis, eius sed sequi temporibus praesentium sit illum atque!"
-              }
+              {productDetails.description ||
+                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptateaut perspiciatis beatae non eum! Veritatis dicta ad, obcaecati accusantium, aperiam illo debitis, eius sed sequi temporibus praesentium sit illum atque!"}
             </Typography>
             <Button
               variant="contained"

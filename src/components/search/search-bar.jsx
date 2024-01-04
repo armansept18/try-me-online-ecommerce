@@ -72,7 +72,6 @@ export const SearchBar = ({
   const getCategoryNameById = (categoryId) => {
     const foundCategory = categories.find((cat) => cat._id === categoryId);
     if (foundCategory) {
-      console.log("get category name by id in search bar:", foundCategory);
       return foundCategory.name;
     } else {
       console.error(`Category with ID ${categoryId} not found.`);
@@ -86,12 +85,9 @@ export const SearchBar = ({
       selectedCategoryId === "" ? "" : getCategoryNameById(selectedCategoryId);
     setSelectedCategoryName(selectedCategoryId);
     onCategoryChange(selectedCategoryValue);
-    console.log("category selector in search bar:", selectedCategoryValue);
-    console.log("selectedCategoryId:", selectedCategoryId);
   };
   const handleSearchChange = (e) => {
     onSearch(e.target.value);
-    console.log("search change :", e.target.value);
   };
 
   const debounceChangeHandler = useCallback(
