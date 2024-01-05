@@ -29,8 +29,9 @@ export const CartCard = ({ product, onRemove, onIncrement, onDecrement }) => {
           alt={name}
           style={{
             width: "120px",
-            height: "auto",
-            borderRadius: "5px",
+            height: "90px",
+            borderRadius: "10px",
+            boxShadow: "6px 8px 12px -2px rgba(0,0,0, 2)",
             marginBottom: { xs: "16px", md: 0 },
           }}
         />

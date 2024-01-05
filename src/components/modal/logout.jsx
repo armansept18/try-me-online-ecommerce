@@ -18,6 +18,7 @@ export const LogoutModal = ({ open, onClose }) => {
   };
   const handleLogout = () => {
     localStorage.removeItem("auth");
+    localStorage.removeItem("cart");
     onClose();
     window.location.reload();
     nav("/home");

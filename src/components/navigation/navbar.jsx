@@ -47,6 +47,8 @@ export const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [openLogoutModal, setOpenLogoutModal] = useState(false);
   const [openCartModal, setOpenCartModal] = useState(false);
+  const [cart, setCart] = useState([]);
+  const [totalQuantity, setTotalQuantity] = useState(0);
 
   const handleOpenNav = (event) => setAnchorNav(event.currentTarget);
   const handleCloseNav = () => setAnchorNav(null);
@@ -58,7 +60,22 @@ export const Navbar = () => {
   };
   const handleCartClicked = () => {
     setOpenCartModal(true);
+    updateCart();
   };
+
+  const updateCart = () => {
+    const updatedCart = JSON.parse(localStorage.getItem("cart")) || [];
+    setCart(updatedCart);
+    const newTotalQuantity = updatedCart.reduce(
+      (total, item) => total + item.qty,
+      0
+    );
+    setTotalQuantity(newTotalQuantity);
+  };
+
+  useEffect(() => {
+    updateCart();
+  }, []);
 
   useEffect(() => {
     const token = localStorage.getItem("auth");
@@ -180,7 +197,11 @@ export const Navbar = () => {
             >
               <Box>
                 <IconButton aria-label="cart" onClick={handleCartClicked}>
-                  <StyledBadge badgeContent={"0"} color="error" max={99}>
+                  <StyledBadge
+                    badgeContent={totalQuantity || "0"}
+                    color="error"
+                    max={99}
+                  >
                     <ShoppingCart fontSize="medium" />
                   </StyledBadge>
                 </IconButton>

@@ -1,9 +1,3 @@
-// Add to card product
-// Sub total
-// List of product
-// pic, name, price, add qty
-// button checkout
-
 import {
   Box,
   Button,
@@ -18,6 +12,15 @@ import { useEffect, useState } from "react";
 
 export const CartModal = ({ open, onClose }) => {
   const [products, setProducts] = useState([]);
+
+  const handleCheckout = async () => {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    if (cart.length === 0) {
+      alert("Your cart is empty!");
+    } else {
+      alert("You just click the button LOL xD");
+    }
+  };
 
   useEffect(() => {
     const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
@@ -55,6 +58,7 @@ export const CartModal = ({ open, onClose }) => {
               backgroundColor: "#f5d194",
             },
           }}
+          onClick={handleCheckout}
         >
           Checkout
         </Button>

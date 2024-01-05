@@ -22,6 +22,8 @@ export const Dashboard = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("auth");
+    localStorage.removeItem("cart");
+
     window.location.reload();
   };
   const handleDeleteAccount = async () => {
