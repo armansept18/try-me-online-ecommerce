@@ -23,6 +23,7 @@ export const ProductDetail = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openProductModal, setOpenProductModal] = useState(false);
+  const [openCartModal, setOpenCartModal] = useState(false);
   const userRole = useSelector((state) => state.auth.user?.role);
 
   const fetchProductDetail = async () => {
@@ -42,6 +43,22 @@ export const ProductDetail = () => {
 
   const handleDelete = () => {
     setOpenDeleteModal(true);
+  };
+
+  const handleAddToCart = () => {
+    const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+    const existingProduct = existingCart.find(
+      (item) => item._id === productDetails._id
+    );
+
+    if (existingProduct) {
+      existingProduct.qty += 1;
+    } else {
+      existingCart.push({ ...productDetails, qty: 1 });
+    }
+
+    localStorage.setItem("cart", JSON.stringify(existingCart));
+    setOpenCartModal(true);
   };
 
   useEffect(() => {
@@ -160,6 +177,7 @@ export const ProductDetail = () => {
                   color: "#F5F5F5",
                 },
               }}
+              onClick={handleAddToCart}
             >
               Add To Cart
             </Button>

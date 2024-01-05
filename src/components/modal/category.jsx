@@ -54,11 +54,11 @@ export const CategoryModal = ({ isOpen, onClose, onCategoryAdded }) => {
     },
   });
   return (
-    <Dialog open={isOpen} onClose={onClose}>
+    <Dialog open={isOpen} onClose={onClose} maxWidth="md">
       <DialogTitle>Create New Category</DialogTitle>
       <DialogContent>
         <form action="" onSubmit={formik.handleSubmit}>
-          <FormControl sx={{ m: 1, minWidth: "304px" }}>
+          <FormControl sx={{ m: 1 }}>
             <TextField
               label="New Category"
               name="name"

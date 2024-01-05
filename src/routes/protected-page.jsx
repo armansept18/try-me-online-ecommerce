@@ -23,7 +23,9 @@ export const ProtectedPage = ({
       await getUser();
 
       if (guestOnly && auth) {
-        return nav("/home");
+        return setTimeout(() => {
+          nav("/home");
+        }, 500);
       } else if (needLogin && !auth) {
         return nav("/login");
       } else return;

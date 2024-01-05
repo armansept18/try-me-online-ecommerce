@@ -19,11 +19,14 @@ import { Fingerprint, Visibility, VisibilityOff } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
 import { Footer } from "../../components/footer/footer";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useFormik } from "formik";
 import { userLogin } from "../../middlewares/auth-action";
 import { types } from "../../redux/types";
+import {
+  FailedLoginAlert,
+  LoginSuccessAlert,
+} from "../../components/alert/alert";
 
 const visible = { opacity: 1, y: 0, transition: { duration: 1.5 } };
 
@@ -49,7 +52,6 @@ export const LoginPage = () => {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
-  const nav = useNavigate();
 
   const handleCloseAlerts = () => {
     setLoginSuccessAlert(false);
@@ -71,14 +73,11 @@ export const LoginPage = () => {
       try {
         const result = await dispatch(userLogin(values));
         if (result === types.success) {
-          nav("/home");
-          alert("Login Success!");
           setLoginSuccessAlert(true);
         } else {
-          alert("Wrong Email or Password!");
+          setFailedLoginAlert(true);
         }
       } catch (err) {
-        alert("Failed Login!");
         console.error("Login Failed :", err);
         setFailedLoginAlert(true);
       }
@@ -86,8 +85,14 @@ export const LoginPage = () => {
   });
   return (
     <>
-      {/* <LoginSuccessAlert open={loginSuccessAlert} onClose={handleCloseAlerts} />
-      <FailedLoginAlert open={failedLoginAlert} onClose={handleCloseAlerts} /> */}
+      <LoginSuccessAlert
+        openLogin={loginSuccessAlert}
+        onClose={handleCloseAlerts}
+      />
+      <FailedLoginAlert
+        openFailed={failedLoginAlert}
+        onClose={handleCloseAlerts}
+      />
       <Paper
         sx={{
           display: "flex",

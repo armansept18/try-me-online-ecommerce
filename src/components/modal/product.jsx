@@ -20,6 +20,13 @@ import {
 export const ProductModal = ({ isOpen, onClose, edit, setProducts }) => {
   const fileInputRef = useRef();
   const [previewImage, setPreviewImage] = useState({});
+  const [addProductAlert, setAddProductAlert] = useState(false);
+  const [failedProductAlert, setFailedProductAlert] = useState(false);
+
+  const handleCloseAlert = () => {
+    setAddProductAlert(false);
+    setFailedProductAlert(false);
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -130,6 +137,8 @@ export const ProductModal = ({ isOpen, onClose, edit, setProducts }) => {
         justifyContent: "center",
         alignItems: "center",
       }}
+      fullWidth
+      maxWidth="md"
     >
       <form action="" onSubmit={formik.handleSubmit}>
         <DialogTitle sx={{ alignSelf: "center" }}>
@@ -179,7 +188,7 @@ export const ProductModal = ({ isOpen, onClose, edit, setProducts }) => {
                 onChange={handleImageChange}
               ></input>
             </FormControl>
-            <FormControl sx={{ m: 1, minWidth: 495 }}>
+            <FormControl sx={{ m: 1, minWidth: "304px" }}>
               <TextField
                 label="Product Name"
                 name="name"
