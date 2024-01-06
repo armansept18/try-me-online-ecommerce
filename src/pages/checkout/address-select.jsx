@@ -1,0 +1,124 @@
+import {
+  Box,
+  Button,
+  Paper,
+  Radio,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
+import { useEffect, useState } from "react";
+import { api } from "../../api/axios";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+
+export const AddressSelectionPage = () => {
+  const [address, setAddress] = useState([]);
+  const [selectedAddress, setSelectedAddress] = useState(null);
+  const nav = useNavigate();
+  const userSelector = useSelector((state) => state.auth);
+
+  const fetchUserAddress = async () => {
+    try {
+      const token = localStorage.getItem("auth");
+      const response = await api.get("/api/delivery-addresses", {
+        headers: { authorization: `Bearer ${token}` },
+      });
+      console.log("fetch address in checkout page :", response.data.data);
+      setAddress(response.data.data);
+    } catch (err) {
+      console.error("Fetch address when checkout error:", err);
+    }
+  };
+  const handleAddressSelection = (selectedAddress) => {
+    console.log("Selected Address:", selectedAddress);
+    setSelectedAddress(selectedAddress);
+  };
+
+  const handleCancel = () => {
+    nav("/products");
+  };
+
+  useEffect(() => {
+    console.log("Selected address in useeffect :", selectedAddress);
+    fetchUserAddress();
+  }, []);
+
+  return (
+    <Paper maxWidth="1368px" sx={{ margin: "80px 20px", height: "100vh" }}>
+      <Box
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Box sx={{ padding: "20px", alignSelf: "flex-start" }}>
+          <Typography>
+            Hello, {userSelector.user ? userSelector.user.full_name : "Guest"}
+          </Typography>
+          <Typography fontSize="24px" fontFamily="Quicksand" fontWeight="700">
+            Address Delivery Selection
+          </Typography>
+        </Box>
+        <Box width="100%">
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Select</TableCell>
+                  <TableCell>Name</TableCell>
+                  <TableCell align="right">Detail</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {address.map((addr) => (
+                  <TableRow
+                    key={addr.id}
+                    sx={{
+                      "&:last-child td, &:last-child th": { border: 0 },
+                      cursor: "pointer",
+                    }}
+                    onClick={() => handleAddressSelection(addr)}
+                  >
+                    <TableCell component="th" scope="row">
+                      <Radio
+                        size="small"
+                        checked={selectedAddress === addr}
+                        onClick={() => handleAddressSelection(addr)}
+                      />
+                    </TableCell>
+                    <TableCell>{addr.nama}</TableCell>
+                    <TableCell align="right">
+                      {addr.detail}, {addr.kelurahan}, {addr.kecamatan},{" "}
+                      {addr.kota}, {addr.provinsi}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+      </Box>
+      <Box m="40px 20px" display="flex" justifyContent="flex-end" gap={2}>
+        <Button
+          variant="outlined"
+          sx={{ fontFamily: "Quicksand", color: "#252525", fontWeight: "600" }}
+          onClick={handleCancel}
+        >
+          Cancel
+        </Button>
+        <Button
+          variant="contained"
+          color="success"
+          sx={{ fontFamily: "Quicksand", fontWeight: "600" }}
+        >
+          Checkout
+        </Button>
+      </Box>
+    </Paper>
+  );
+};

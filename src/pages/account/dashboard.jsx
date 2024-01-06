@@ -2,17 +2,15 @@ import { Box, Button, Tab, Typography } from "@mui/material";
 import { Navbar } from "../../components/navigation/navbar";
 import { Footer } from "../../components/footer/footer";
 import * as React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import TabPanel from "@mui/lab/TabPanel";
 import { TabContext, TabList } from "@mui/lab";
 import { AddressList } from "../../components/profile/address-list";
-import { receiveUser } from "../../middlewares/auth-action";
 import { api } from "../../api/axios";
 
 export const Dashboard = () => {
   const [value, setValue] = React.useState("1");
   const userSelector = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
 
   const [userAddresses, setUserAddresses] = React.useState([]);
 
@@ -29,20 +27,6 @@ export const Dashboard = () => {
   const handleDeleteAccount = async () => {
     alert("Don't Delete Your Account!");
   };
-
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = localStorage.getItem("auth");
-        if (token) {
-          await dispatch(receiveUser());
-        }
-      } catch (err) {
-        console.error("Error in fetchData: ", err);
-      }
-    };
-    fetchData();
-  }, [dispatch]);
 
   React.useEffect(() => {
     const fetchAddresses = async () => {
@@ -93,19 +77,25 @@ export const Dashboard = () => {
                 Profile
               </Typography>
               <Typography fontFamily="Quicksand">
-                UID : USER-{userSelector.customer_id}
+                UID : {userSelector.user ? userSelector.user.role : "Guest"}
+                &nbsp;-&nbsp;
+                {userSelector.user
+                  ? userSelector.user.customer_id
+                  : "1A2B3C4D5E6F"}
               </Typography>
 
               <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                 <Typography fontFamily="Quicksand">Name : </Typography>
                 <Typography fontFamily="Quicksand">
-                  {userSelector.full_name}
+                  {userSelector.user ? userSelector.user.full_name : "Guest"}
                 </Typography>
               </Box>
               <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                 <Typography fontFamily="Quicksand">Email :</Typography>
                 <Typography fontFamily="Quicksand">
-                  {userSelector.email}
+                  {userSelector.user
+                    ? userSelector.user.email
+                    : "guest@mail.com"}
                 </Typography>
               </Box>
             </Box>

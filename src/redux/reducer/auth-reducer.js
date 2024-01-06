@@ -5,13 +5,12 @@ const init_state = {
   full_name: "",
   customer_id: 0,
   email: "",
-  role: "user",
+  role: "",
 };
 
 export const userReducer = (state = init_state, action) => {
   if (action.type === types.login) {
     return {
-      ...state,
       ...action.payload,
     };
   } else if (action.type === types.logout) {

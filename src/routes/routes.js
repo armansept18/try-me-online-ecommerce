@@ -1,6 +1,7 @@
 import { Dashboard } from "../pages/account/dashboard";
 import { LoginPage } from "../pages/account/login";
 import { RegisterPage } from "../pages/account/register";
+import { AddressSelectionPage } from "../pages/checkout/address-select";
 import { Homepage } from "../pages/home/homepage";
 import { ProductDetail } from "../pages/products/product-detail";
 import { ProductPage } from "../pages/products/product-page";
@@ -25,5 +26,6 @@ export const routes = [
   new RouteClass("products", <ProductPage />),
   new RouteClass("product-detail/:productId", <ProductDetail />),
   new RouteClass("account", <Dashboard />, true, false),
+  new RouteClass("address-select", <AddressSelectionPage />),
   new RouteClass("*", <Redirect />),
 ];

@@ -27,18 +27,34 @@ export const NewArrivalProducts = () => {
   }, []);
 
   return (
-    <Paper elevation={0} sx={{ marginTop: "134px", background: "transparent" }}>
-      <Box sx={{ margin: "40px 64px 0 64px" }}>
-        <Typography fontSize="16px" fontFamily="Quicksand">
-          NEW ARRIVALS
-        </Typography>
-        <Typography fontSize="48px" fontWeight="400" fontFamily="Russo One">
-          New Arrival Products
-        </Typography>
-        <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Typography fontSize="18px" fontFamily="Quicksand">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+    <Paper
+      className="flex flex-col justify-center items-center"
+      elevation={0}
+      sx={{
+        marginTop: "80px",
+        background: "transparent",
+      }}
+    >
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        maxWidth="1368px"
+        width="100vw"
+      >
+        <Box>
+          <Typography fontSize="16px" fontFamily="Quicksand">
+            NEW ARRIVALS
           </Typography>
+          <Typography fontSize="48px" fontWeight="400" fontFamily="Russo One">
+            New Arrival Products
+          </Typography>
+          <Box>
+            <Typography fontSize="18px" fontFamily="Quicksand">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            </Typography>
+          </Box>
+        </Box>
+        <Box display="flex" justifyContent="center" alignItems="flex-end">
           <Button
             variant="outlined"
             sx={{
