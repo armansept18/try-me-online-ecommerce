@@ -9,16 +9,25 @@ import {
 } from "@mui/material";
 import { CartList } from "../card/cart-list";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const CartModal = ({ open, onClose }) => {
   const [products, setProducts] = useState([]);
+  const nav = useNavigate();
 
   const handleCheckout = async () => {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const token = localStorage.getItem("auth");
+    if (!token) {
+      alert("Please login!");
+    }
+
     if (cart.length === 0) {
       alert("Your cart is empty!");
     } else {
-      alert("You just click the button LOL xD");
+      setTimeout(() => {
+        nav("/account");
+      }, 1000);
     }
   };
 

@@ -1,13 +1,30 @@
 import { Box, Button, Paper, Typography } from "@mui/material";
 import { ProductList } from "./products-list";
 import { useNavigate } from "react-router-dom";
+import { api } from "../../api/axios";
+import { useEffect, useState } from "react";
 
 export const NewArrivalProducts = () => {
   const nav = useNavigate();
+  const [products, setProducts] = useState([]);
+
+  const fetchProduct = async () => {
+    try {
+      const response = await api.get(`/api/products`);
+      setProducts(response.data.data);
+      console.log("new arrival response :", response.data.data);
+    } catch (err) {
+      console.log("Error fetch new arrival: ", err);
+    }
+  };
 
   const handleView = () => {
     nav("/products");
   };
+
+  useEffect(() => {
+    fetchProduct();
+  }, []);
 
   return (
     <Paper elevation={0} sx={{ marginTop: "134px", background: "transparent" }}>
@@ -40,7 +57,7 @@ export const NewArrivalProducts = () => {
           </Button>
         </Box>
       </Box>
-      {/* <ProductList /> */}
+      <ProductList products={products} />
     </Paper>
   );
 };
