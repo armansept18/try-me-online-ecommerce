@@ -8,11 +8,14 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { api } from "../../api/axios";
+import { useState } from "react";
+import { SuccessDeleteProduct } from "../alert/alert";
 
 export const DeleteProductModal = ({ open, onClose, productId }) => {
   const theme = useTheme();
   const nav = useNavigate();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const [deleteProductAlert, setDeleteProductAlert] = useState(false);
 
   const handleClose = () => {
     onClose();
@@ -28,9 +31,10 @@ export const DeleteProductModal = ({ open, onClose, productId }) => {
         headers: { authorization: `Bearer ${token}` },
       });
       console.log("handle delete :", response);
-      alert("Product Deleted!");
-
-      nav("/products");
+      setDeleteProductAlert(true);
+      setTimeout(() => {
+        nav("/products");
+      }, 2000);
     } catch (err) {
       console.error("Error deleting product : ", err);
     }
@@ -42,6 +46,10 @@ export const DeleteProductModal = ({ open, onClose, productId }) => {
       aria-labelledby="responsive-dialog-title"
       fullWidth
     >
+      <SuccessDeleteProduct
+        onOpen={deleteProductAlert}
+        onClose={() => setDeleteProductAlert(false)}
+      />
       <DialogTitle
         id="responsive-dialog-title"
         alignSelf="center"

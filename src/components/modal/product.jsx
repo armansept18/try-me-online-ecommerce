@@ -16,17 +16,12 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { SuccessAddProduct } from "../alert/alert";
 
 export const ProductModal = ({ isOpen, onClose, edit, setProducts }) => {
   const fileInputRef = useRef();
   const [previewImage, setPreviewImage] = useState({});
-  const [addProductAlert, setAddProductAlert] = useState(false);
-  const [failedProductAlert, setFailedProductAlert] = useState(false);
-
-  const handleCloseAlert = () => {
-    setAddProductAlert(false);
-    setFailedProductAlert(false);
-  };
+  const [addProductSuccessAlert, setAddProductSuccessAlert] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -77,9 +72,12 @@ export const ProductModal = ({ isOpen, onClose, edit, setProducts }) => {
         if (response.status === 200 || response.status === 201) {
           const responseData = response.data;
           const action = edit ? "updated" : "added";
-          alert(`Product ${action} with name: ${responseData.name}`);
-          onClose();
-          window.location.reload();
+          setAddProductSuccessAlert(true);
+          formik.resetForm();
+          setTimeout(() => {
+            onClose();
+            window.location.reload();
+          }, 2000);
           setProducts((prevState) => [...prevState, responseData]);
         }
       } catch (err) {
@@ -108,7 +106,6 @@ export const ProductModal = ({ isOpen, onClose, edit, setProducts }) => {
   };
 
   useEffect(() => {
-    // formik.resetForm();
     formik.setValues({
       image: edit?.image_url || "",
       name: edit?.name || "",
@@ -123,9 +120,6 @@ export const ProductModal = ({ isOpen, onClose, edit, setProducts }) => {
         ? `http://localhost:5000/static/` + edit?.image_url
         : defaultImage
     );
-    console.log("Edit image url :", edit?.image_url);
-    console.log("Edit category name :", edit?.category);
-    console.log("Edit tags name :", edit?.tags);
   }, [isOpen, edit, formik.setValues]);
 
   return (
@@ -140,6 +134,10 @@ export const ProductModal = ({ isOpen, onClose, edit, setProducts }) => {
       fullWidth
       maxWidth="md"
     >
+      <SuccessAddProduct
+        onOpen={addProductSuccessAlert}
+        onClose={() => setAddProductSuccessAlert(false)}
+      />
       <form action="" onSubmit={formik.handleSubmit}>
         <DialogTitle sx={{ alignSelf: "center" }}>
           {edit ? "Edit Product" : "Create Product"}

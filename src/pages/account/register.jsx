@@ -28,6 +28,10 @@ import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import { api } from "../../api/axios";
 import { types } from "../../redux/types";
+import {
+  FailedRegisterAlert,
+  RegisterSuccessAlert,
+} from "../../components/alert/alert";
 
 const visible = { opacity: 1, y: 0, transition: { duration: 1.5 } };
 
@@ -45,6 +49,8 @@ const StyledLoginButton = styled(Button)({
 });
 
 export const RegisterPage = () => {
+  const [registerSuccessAlert, setRegisterSuccessAlert] = React.useState(false);
+  const [registerFailedAlert, setRegisterFailedAlert] = React.useState(false);
   YupPassword(Yup);
   const [showPassword, setShowPassword] = React.useState(false);
   const nav = useNavigate();
@@ -69,13 +75,13 @@ export const RegisterPage = () => {
         const res = await api.post("/auth/register", values);
         console.log("Register Submit :", res);
         if (res.status === 200) {
-          alert("Register Success!");
+          setRegisterSuccessAlert(true);
           nav("/login");
         }
         if (res === types.success) nav("/login");
-        alert("Register Success!");
+        setRegisterSuccessAlert(true);
       } catch (err) {
-        alert("Email has been registered!");
+        setRegisterFailedAlert(true);
         console.error("Registration Failed :", err);
       }
     },
@@ -83,6 +89,14 @@ export const RegisterPage = () => {
 
   return (
     <>
+      <RegisterSuccessAlert
+        onOpen={registerSuccessAlert}
+        onClose={() => setRegisterSuccessAlert(false)}
+      />
+      <FailedRegisterAlert
+        onOpen={registerFailedAlert}
+        onClose={() => setRegisterFailedAlert(false)}
+      />
       <Paper
         sx={{
           display: "flex",

@@ -6,14 +6,15 @@ import {
   DialogContent,
   DialogTitle,
   FormControl,
-  FormLabel,
   TextField,
 } from "@mui/material";
 import { useFormik } from "formik";
 import { api } from "../../api/axios";
 import * as Yup from "yup";
+import { useState } from "react";
 
 export const CategoryModal = ({ isOpen, onClose, onCategoryAdded }) => {
+  const [createSuccessAlert, setCreateSuccessAlert] = useState(false);
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -34,10 +35,12 @@ export const CategoryModal = ({ isOpen, onClose, onCategoryAdded }) => {
         console.log("Response add category :", response);
         if (response.status === 200) {
           const responseData = response.data;
-          alert("Category added successfully!");
+          setCreateSuccessAlert(true);
           const newCategory = responseData.category;
-          onClose();
           onCategoryAdded(newCategory);
+          setTimeout(() => {
+            onClose();
+          }, 2000);
         } else {
           console.log("Unexpected response :", response);
         }

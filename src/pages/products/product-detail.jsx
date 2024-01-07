@@ -15,15 +15,17 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 import { useSelector } from "react-redux";
 import { DeleteProductModal } from "../../components/modal/delete-product";
 import { ProductModal } from "../../components/modal/product";
+import { SuccessAddToCart } from "../../components/alert/alert";
+import { enqueueSnackbar } from "notistack";
 
 export const ProductDetail = () => {
-  const nav = useNavigate();
   const { productId } = useParams();
   const [productDetails, setProductDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openProductModal, setOpenProductModal] = useState(false);
   const [openCartModal, setOpenCartModal] = useState(false);
+  const [alertAddToCart, setAlertAddToCart] = useState(false);
   const userRole = useSelector((state) => state.auth.user?.role);
 
   const fetchProductDetail = async () => {
@@ -45,7 +47,7 @@ export const ProductDetail = () => {
     setOpenDeleteModal(true);
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (variant) => () => {
     const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
     const existingProduct = existingCart.find(
       (item) => item._id === productDetails._id
@@ -57,7 +59,10 @@ export const ProductDetail = () => {
       existingCart.push({ ...productDetails, qty: 1 });
     }
 
+    enqueueSnackbar("Product has been added to cart!", { variant });
+
     localStorage.setItem("cart", JSON.stringify(existingCart));
+    setAlertAddToCart(true);
     setOpenCartModal(true);
   };
 
@@ -82,6 +87,7 @@ export const ProductDetail = () => {
         onClose={() => setOpenProductModal(false)}
         edit={productDetails}
       />
+
       <Paper
         sx={{
           display: "flex",
@@ -177,13 +183,17 @@ export const ProductDetail = () => {
                   color: "#F5F5F5",
                 },
               }}
-              onClick={handleAddToCart}
+              onClick={handleAddToCart("success")}
             >
               Add To Cart
             </Button>
           </Box>
         </Box>
       </Paper>
+      <SuccessAddToCart
+        onOpen={alertAddToCart}
+        onClose={() => setAlertAddToCart(false)}
+      />
       <Footer />
     </>
   );

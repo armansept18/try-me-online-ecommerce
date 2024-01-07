@@ -10,23 +10,28 @@ import {
 import { CartList } from "../card/cart-list";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { CartEmptyAlert, NeedLoginAlert } from "../alert/alert";
 
 export const CartModal = ({ open, onClose }) => {
   const [products, setProducts] = useState([]);
+  const [needLoginAlert, setNeedLoginAlert] = useState(false);
+  const [cartEmptyAlert, setCartEmptyAlert] = useState(false);
   const nav = useNavigate();
 
   const handleCheckout = async () => {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     const token = localStorage.getItem("auth");
     if (!token) {
-      alert("Please login!");
+      setTimeout(() => {
+        setNeedLoginAlert(true);
+      }, 2000);
     }
 
     if (cart.length === 0) {
-      alert("Your cart is empty!");
+      setCartEmptyAlert(true);
     } else {
       setTimeout(() => {
-        nav("/account");
+        nav("/address-select");
       }, 1000);
     }
   };
@@ -38,6 +43,14 @@ export const CartModal = ({ open, onClose }) => {
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
+      <NeedLoginAlert
+        onOpen={needLoginAlert}
+        onClose={() => setNeedLoginAlert(false)}
+      />
+      <CartEmptyAlert
+        onOpen={cartEmptyAlert}
+        onClose={() => setCartEmptyAlert(false)}
+      />
       <DialogTitle>Your Cart</DialogTitle>
       <DialogContent>
         <Box>

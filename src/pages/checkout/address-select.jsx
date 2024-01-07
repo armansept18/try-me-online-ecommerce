@@ -28,14 +28,12 @@ export const AddressSelectionPage = () => {
       const response = await api.get("/api/delivery-addresses", {
         headers: { authorization: `Bearer ${token}` },
       });
-      console.log("fetch address in checkout page :", response.data.data);
       setAddress(response.data.data);
     } catch (err) {
       console.error("Fetch address when checkout error:", err);
     }
   };
   const handleAddressSelection = (selectedAddress) => {
-    console.log("Selected Address:", selectedAddress);
     setSelectedAddress(selectedAddress);
   };
 
@@ -57,11 +55,16 @@ export const AddressSelectionPage = () => {
         alignItems="center"
       >
         <Box sx={{ padding: "20px", alignSelf: "flex-start" }}>
-          <Typography>
+          <Typography
+            fontSize="16px"
+            fontFamily="Quicksand"
+            fontWeight="500"
+            mb={2}
+          >
             Hello, {userSelector.user ? userSelector.user.full_name : "Guest"}
           </Typography>
           <Typography fontSize="24px" fontFamily="Quicksand" fontWeight="700">
-            Address Delivery Selection
+            Select Delivery Address
           </Typography>
         </Box>
         <Box width="100%">

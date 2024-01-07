@@ -14,6 +14,12 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { api } from "../../api/axios";
+import {
+  CreateAddressEmptyField,
+  CreateAddressFailed,
+  CreateAddressSuccess,
+  UpdateAddressSuccess,
+} from "../alert/alert";
 
 export const AddressModal = ({
   open,
@@ -35,6 +41,11 @@ export const AddressModal = ({
   const [subDistrictOptions, setSubDistrictOptions] = useState([]);
 
   const [editMode, setEditMode] = useState(false);
+
+  const [createSuccess, setCreateSuccess] = useState(false);
+  const [updateSuccess, setUpdateSuccess] = useState(false);
+  const [createFailed, setCreateFailed] = useState(false);
+  const [emptyField, setEmptyField] = useState(false);
 
   const handleClose = (event, reason) => {
     if (reason !== "backdropClick") {
@@ -141,14 +152,15 @@ export const AddressModal = ({
       });
       if (response.status === 200) {
         const responseData = response.data;
-        alert(responseData.message);
+        console.log("create address :", responseData);
+        setCreateSuccess(true);
         const newAddress = responseData.address;
         setUserAddresses((prevAddresses) => [...prevAddresses, newAddress]);
 
         console.log("Address added successfully:", responseData.address);
       } else {
         const errorData = response.data || {};
-        alert("Failed creating address, please try again!");
+        setCreateFailed(true);
         console.error(
           "Failed to add address:",
           errorData.message || "Unknown error"
@@ -168,7 +180,7 @@ export const AddressModal = ({
       !addressData.kelurahan ||
       !addressData.detail
     ) {
-      alert("Please fill the fields.");
+      setEmptyField(true);
       return;
     }
     try {
@@ -185,11 +197,11 @@ export const AddressModal = ({
       );
       if (res.status === 200) {
         const responseData = res.data;
-        alert("Success update address!");
+        setUpdateSuccess(true);
         fetchAddresses();
       } else {
         const errorData = res.data || {};
-        alert("Failed updating address, please try again!");
+        setCreateFailed(true);
         console.error(
           "Failed to update address:",
           errorData.message || "Unknown error"
@@ -276,19 +288,19 @@ export const AddressModal = ({
       !selectedDistrictId ||
       !selectedSubdistrictId
     ) {
-      alert("Please fill the field!");
+      setEmptyField(true);
       return;
     }
 
     if (editMode) {
       await updateAddress(editAddressId, addressData);
-      console.log("Input update address data :", addressData);
     } else {
       await createAddress(addressData);
-      console.log("Input create address data :", addressData);
     }
-    onClose(false);
     resetForm();
+    setTimeout(() => {
+      onClose(false);
+    }, 2000);
   };
 
   useEffect(() => {
@@ -306,6 +318,22 @@ export const AddressModal = ({
 
   return (
     <Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
+      <CreateAddressSuccess
+        onOpen={createSuccess}
+        onClose={() => setCreateSuccess(false)}
+      />
+      <UpdateAddressSuccess
+        onOpen={updateSuccess}
+        onClose={() => setUpdateSuccess(false)}
+      />
+      <CreateAddressFailed
+        onOpen={createFailed}
+        onClose={() => setCreateFailed(false)}
+      />
+      <CreateAddressEmptyField
+        onOpen={emptyField}
+        onClose={() => setEmptyField(false)}
+      />
       <DialogTitle>
         {editMode ? "Edit Your Address" : "Create Your Address"}
       </DialogTitle>

@@ -26,6 +26,6 @@ export const routes = [
   new RouteClass("products", <ProductPage />),
   new RouteClass("product-detail/:productId", <ProductDetail />),
   new RouteClass("account", <Dashboard />, true, false),
-  new RouteClass("address-select", <AddressSelectionPage />),
+  new RouteClass("address-select", <AddressSelectionPage />, true, false),
   new RouteClass("*", <Redirect />),
 ];

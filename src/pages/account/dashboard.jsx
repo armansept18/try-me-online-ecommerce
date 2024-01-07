@@ -7,10 +7,12 @@ import TabPanel from "@mui/lab/TabPanel";
 import { TabContext, TabList } from "@mui/lab";
 import { AddressList } from "../../components/profile/address-list";
 import { api } from "../../api/axios";
+import { DeleteAccount } from "../../components/alert/alert";
 
 export const Dashboard = () => {
   const [value, setValue] = React.useState("1");
   const userSelector = useSelector((state) => state.auth);
+  const [deleteAccountAlert, setDeleteAccountAlert] = React.useState(false);
 
   const [userAddresses, setUserAddresses] = React.useState([]);
 
@@ -25,7 +27,7 @@ export const Dashboard = () => {
     window.location.reload();
   };
   const handleDeleteAccount = async () => {
-    alert("Don't Delete Your Account!");
+    setDeleteAccountAlert(true);
   };
 
   React.useEffect(() => {
@@ -51,6 +53,10 @@ export const Dashboard = () => {
   return (
     <>
       <Navbar />
+      <DeleteAccount
+        onOpen={deleteAccountAlert}
+        onClose={() => setDeleteAccountAlert(false)}
+      />
       <Box
         sx={{
           margin: "112px 20px 0 20px",
@@ -77,25 +83,21 @@ export const Dashboard = () => {
                 Profile
               </Typography>
               <Typography fontFamily="Quicksand">
-                UID : {userSelector.user ? userSelector.user.role : "Guest"}
+                UID : {userSelector.user ? userSelector.user.role : ""}
                 &nbsp;-&nbsp;
-                {userSelector.user
-                  ? userSelector.user.customer_id
-                  : "1A2B3C4D5E6F"}
+                {userSelector.user ? userSelector.user.customer_id : ""}
               </Typography>
 
               <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                 <Typography fontFamily="Quicksand">Name : </Typography>
                 <Typography fontFamily="Quicksand">
-                  {userSelector.user ? userSelector.user.full_name : "Guest"}
+                  {userSelector.user ? userSelector.user.full_name : ""}
                 </Typography>
               </Box>
               <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                 <Typography fontFamily="Quicksand">Email :</Typography>
                 <Typography fontFamily="Quicksand">
-                  {userSelector.user
-                    ? userSelector.user.email
-                    : "guest@mail.com"}
+                  {userSelector.user ? userSelector.user.email : ""}
                 </Typography>
               </Box>
             </Box>

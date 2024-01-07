@@ -9,11 +9,14 @@ import { Button } from "@mui/material";
 import { api } from "../../api/axios";
 import { useState } from "react";
 import { AddressModal } from "../modal/address";
+import { CreateAddressFailed, DeleteAddressSuccess } from "../alert/alert";
 
 export const AddressList = ({ addresses, setUserAddresses }) => {
   const addressList = Array.isArray(addresses) ? addresses : [];
   const [editAddressId, setEditAddressId] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [deleteSuccess, setDeleteSuccess] = useState(false);
+  const [deleteFailed, setDeleteFailed] = useState(false);
 
   const handleCreate = () => {
     setIsEditModalOpen(true);
@@ -27,12 +30,12 @@ export const AddressList = ({ addresses, setUserAddresses }) => {
           authorization: `Bearer ${token}`,
         },
       });
-      alert("Success delete address!");
+      setDeleteSuccess(true);
       setUserAddresses((prevAddr) =>
         prevAddr.filter((addr) => addr._id !== addressId)
       );
     } catch (err) {
-      alert("Error delete address! Check your connection");
+      setDeleteFailed(true);
       console.error("Handle delete err :", err);
     }
   };
@@ -44,6 +47,14 @@ export const AddressList = ({ addresses, setUserAddresses }) => {
 
   return (
     <>
+      <CreateAddressFailed
+        onOpen={deleteFailed}
+        onClose={() => setDeleteFailed(false)}
+      />
+      <DeleteAddressSuccess
+        onOpen={deleteSuccess}
+        onClose={() => setDeleteSuccess(false)}
+      />
       <Button
         fontFamily="Quicksand"
         onClick={handleCreate}
