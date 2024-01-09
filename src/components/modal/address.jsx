@@ -72,7 +72,6 @@ export const AddressModal = ({
         },
       });
       const addresses = response.data.data || [];
-      console.log("Data in fetchAddress :", addresses);
       setUserAddresses(addresses);
     } catch (error) {
       console.error("Error fetching user addresses:", error);
@@ -85,8 +84,6 @@ export const AddressModal = ({
         "https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json"
       );
       const data = await response.json();
-      console.log("Response fetchProvinces :", response);
-      console.log("Data fetchProvinces :", data);
       setProvinceOptions(data);
     } catch (error) {
       console.error("Error fetching provinces:", error);
@@ -96,13 +93,10 @@ export const AddressModal = ({
   const fetchCities = async () => {
     try {
       const provId = selectedProvinceId;
-      console.log("Fetch Cities Check provid:", provId);
       const response = await fetch(
         `https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${provId}.json`
       );
       const data = await response.json();
-      console.log("Response fetchCities :", response);
-      console.log("Data fetchCities :", data);
       setCityOptions(data);
     } catch (error) {
       console.error("Error fetching cities:", error);
@@ -112,13 +106,10 @@ export const AddressModal = ({
   const fetchDistricts = async () => {
     try {
       const cityId = selectedCityId;
-      console.log("Fetch districts check cityid:", cityId);
       const response = await fetch(
         `https://www.emsifa.com/api-wilayah-indonesia/api/districts/${cityId}.json`
       );
       const data = await response.json();
-      console.log("Response fetchDistricts :", response);
-      console.log("Data fetchDistricts :", data);
       setDistrictOptions(data);
     } catch (error) {
       console.error("Error fetching districts:", error);
@@ -128,13 +119,10 @@ export const AddressModal = ({
   const fetchSubDistricts = async () => {
     try {
       const districtId = selectedDistrictId;
-      console.log("Fetch Sub districts check districtId:", districtId);
       const response = await fetch(
         `https://www.emsifa.com/api-wilayah-indonesia/api/villages/${districtId}.json`
       );
       const data = await response.json();
-      console.log("Response fetchSubDistricts :", response);
-      console.log("Data fetchSubDistricts :", data);
       setSubDistrictOptions(data);
     } catch (error) {
       console.error("Error fetching sub-districts:", error);
@@ -221,7 +209,6 @@ export const AddressModal = ({
         },
       });
       const addressData = response.data;
-      console.log("Fetched address details:", addressData);
 
       if (addressData) {
         setLocationTag(addressData.nama || "");

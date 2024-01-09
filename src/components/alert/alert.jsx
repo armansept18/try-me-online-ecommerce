@@ -6,6 +6,54 @@ import { useState } from "react";
 function SlideTransition(props) {
   return <Slide {...props} direction="down" />;
 }
+export const SuccessPrint = ({ onOpen, onClose }) => {
+  const [state, setState] = useState({
+    open: false,
+    vertical: "top",
+    horizontal: "center",
+  });
+  const { vertical, horizontal, open } = state;
+  return (
+    <Box>
+      <Snackbar
+        anchorOrigin={{ vertical, horizontal }}
+        open={onOpen}
+        onClose={onClose}
+        TransitionComponent={SlideTransition}
+        key={(vertical, horizontal)}
+        autoHideDuration={2000}
+      >
+        <Alert severity="success">
+          <AlertTitle>Success! - Please check your order.</AlertTitle>
+        </Alert>
+      </Snackbar>
+    </Box>
+  );
+};
+export const SuccessCheckout = ({ onOpen, onClose }) => {
+  const [state, setState] = useState({
+    open: false,
+    vertical: "top",
+    horizontal: "center",
+  });
+  const { vertical, horizontal, open } = state;
+  return (
+    <Box>
+      <Snackbar
+        anchorOrigin={{ vertical, horizontal }}
+        open={onOpen}
+        onClose={onClose}
+        TransitionComponent={SlideTransition}
+        key={(vertical, horizontal)}
+        autoHideDuration={2000}
+      >
+        <Alert severity="success">
+          <AlertTitle>Thank you! - Your order has been process</AlertTitle>
+        </Alert>
+      </Snackbar>
+    </Box>
+  );
+};
 
 export const SuccessAddProduct = ({ onOpen, onClose }) => {
   const [state, setState] = useState({
@@ -356,6 +404,71 @@ export const DeleteAccount = ({ onOpen, onClose }) => {
     >
       <Alert severity="error">
         <AlertTitle>Sorry! - Can't Delete Account.</AlertTitle>
+      </Alert>
+    </Snackbar>
+  );
+};
+
+export const AddressNotSelected = ({ onOpen, onClose }) => {
+  const [state, setState] = useState({
+    open: false,
+    vertical: "top",
+    horizontal: "center",
+  });
+  const { vertical, horizontal, open } = state;
+  return (
+    <Snackbar
+      anchorOrigin={{ vertical, horizontal }}
+      open={onOpen}
+      onClose={onClose}
+      key={(vertical, horizontal)}
+      autoHideDuration={2000}
+    >
+      <Alert severity="error">
+        <AlertTitle>Failed! - Please select your delivery address.</AlertTitle>
+      </Alert>
+    </Snackbar>
+  );
+};
+
+export const SessionExpired = ({ onOpen, onClose }) => {
+  const [state, setState] = useState({
+    open: false,
+    vertical: "top",
+    horizontal: "center",
+  });
+  const { vertical, horizontal, open } = state;
+  return (
+    <Snackbar
+      anchorOrigin={{ vertical, horizontal }}
+      open={onOpen}
+      onClose={onClose}
+      key={(vertical, horizontal)}
+      autoHideDuration={2000}
+    >
+      <Alert severity="error">
+        <AlertTitle>Session Expired! - Please login again.</AlertTitle>
+      </Alert>
+    </Snackbar>
+  );
+};
+export const FailedCheckout = ({ onOpen, onClose }) => {
+  const [state, setState] = useState({
+    open: false,
+    vertical: "top",
+    horizontal: "center",
+  });
+  const { vertical, horizontal, open } = state;
+  return (
+    <Snackbar
+      anchorOrigin={{ vertical, horizontal }}
+      open={onOpen}
+      onClose={onClose}
+      key={(vertical, horizontal)}
+      autoHideDuration={2000}
+    >
+      <Alert severity="error">
+        <AlertTitle>Checkout Error! - Please check connection.</AlertTitle>
       </Alert>
     </Snackbar>
   );

@@ -58,10 +58,6 @@ export const Navbar = () => {
   const handleLogout = () => {
     setOpenLogoutModal(true);
   };
-  const handleCartClicked = () => {
-    setOpenCartModal(true);
-    updateCart();
-  };
 
   const updateCart = () => {
     const updatedCart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -72,7 +68,10 @@ export const Navbar = () => {
     );
     setTotalQuantity(newTotalQuantity);
   };
-
+  const handleCartClicked = () => {
+    setOpenCartModal(true);
+    updateCart();
+  };
   useEffect(() => {
     updateCart();
   }, []);

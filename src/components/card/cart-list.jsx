@@ -30,6 +30,8 @@ export const CartCard = ({ product, onRemove, onIncrement, onDecrement }) => {
           style={{
             width: "120px",
             height: "90px",
+            objectFit: "cover",
+            aspectRatio: "1",
             borderRadius: "10px",
             boxShadow: "6px 8px 12px -2px rgba(0,0,0, 2)",
             marginBottom: { xs: "16px", md: 0 },

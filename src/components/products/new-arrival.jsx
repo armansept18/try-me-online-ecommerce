@@ -12,7 +12,6 @@ export const NewArrivalProducts = () => {
     try {
       const response = await api.get(`/api/products`);
       setProducts(response.data.data);
-      console.log("new arrival response :", response.data.data);
     } catch (err) {
       console.log("Error fetch new arrival: ", err);
     }

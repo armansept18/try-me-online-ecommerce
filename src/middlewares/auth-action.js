@@ -16,7 +16,6 @@ export const receiveUser = () => {
         return;
       }
       const userId = decodedToken._id;
-      console.log("Decoded Token in auth-action:", decodedToken);
       const res = await api.get(`auth/check/${userId}`);
       const user = res.data;
       dispatch({
@@ -35,7 +34,6 @@ export const userLogin = (values) => {
       const res = await api.post("auth/login", {
         ...values,
       });
-      console.log("Login Submit :", res);
 
       const user = res.data.user;
       const token = res.data.token;
@@ -80,4 +78,11 @@ export const deleteUser = () => {
       console.error("Error in deleteUser: ", err);
     }
   };
+};
+
+export const isTokenExpired = (token) => {
+  if (!token) return true;
+  const decodedToken = jwtDecode(token);
+  const currentTime = Date.now() / 1000;
+  return decodedToken.exp < currentTime;
 };

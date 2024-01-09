@@ -17,7 +17,6 @@ export const TrendingProducts = () => {
         },
       });
       setProducts(response.data.data);
-      console.log("trending products :", response.data.data);
     } catch (err) {
       console.error("trending products error :", err.message);
     }

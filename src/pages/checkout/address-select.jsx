@@ -15,12 +15,21 @@ import { useEffect, useState } from "react";
 import { api } from "../../api/axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { InvoiceModal } from "../../components/modal/invoice";
+import {
+  AddressNotSelected,
+  SuccessCheckout,
+} from "../../components/alert/alert";
+import { CheckoutConfirmation } from "../../components/modal/checkout-confirmation";
 
 export const AddressSelectionPage = () => {
   const [address, setAddress] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const nav = useNavigate();
   const userSelector = useSelector((state) => state.auth);
+  const [confirmationModal, setConfirmationModal] = useState(false);
+  const [successCheckoutAlert, setSuccessCheckoutAlert] = useState(false);
+  const [addressSelectAlert, setAddressSelectAlert] = useState(false);
 
   const fetchUserAddress = async () => {
     try {
@@ -34,11 +43,20 @@ export const AddressSelectionPage = () => {
     }
   };
   const handleAddressSelection = (selectedAddress) => {
+    console.log("Address select :", selectedAddress);
     setSelectedAddress(selectedAddress);
   };
 
   const handleCancel = () => {
     nav("/products");
+  };
+
+  const handleCheckout = () => {
+    if (!selectedAddress) {
+      setAddressSelectAlert(true);
+    } else {
+      setConfirmationModal(true);
+    }
   };
 
   useEffect(() => {
@@ -48,6 +66,19 @@ export const AddressSelectionPage = () => {
 
   return (
     <Paper maxWidth="1368px" sx={{ margin: "80px 20px", height: "100vh" }}>
+      <SuccessCheckout
+        onOpen={successCheckoutAlert}
+        onClose={() => setSuccessCheckoutAlert(false)}
+      />
+      <AddressNotSelected
+        onOpen={addressSelectAlert}
+        onClose={() => setAddressSelectAlert(false)}
+      />
+      <CheckoutConfirmation
+        onOpen={confirmationModal}
+        onClose={() => setConfirmationModal(false)}
+        selectedAddress={selectedAddress}
+      />
       <Box
         display="flex"
         flexDirection="column"
@@ -118,8 +149,9 @@ export const AddressSelectionPage = () => {
           variant="contained"
           color="success"
           sx={{ fontFamily: "Quicksand", fontWeight: "600" }}
+          onClick={handleCheckout}
         >
-          Checkout
+          Confirm
         </Button>
       </Box>
     </Paper>

@@ -40,7 +40,6 @@ export const Dashboard = () => {
           },
         });
         const addresses = response.data.data || [];
-        console.log("Data in fetchAddress :", addresses);
         setUserAddresses(addresses);
       } catch (error) {
         console.error("Error fetching user addresses in dashboard:", error);

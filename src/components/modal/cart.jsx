@@ -11,6 +11,7 @@ import { CartList } from "../card/cart-list";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CartEmptyAlert, NeedLoginAlert } from "../alert/alert";
+import { api } from "../../api/axios";
 
 export const CartModal = ({ open, onClose }) => {
   const [products, setProducts] = useState([]);
@@ -25,14 +26,30 @@ export const CartModal = ({ open, onClose }) => {
       setTimeout(() => {
         setNeedLoginAlert(true);
       }, 2000);
+      return;
     }
 
     if (cart.length === 0) {
       setCartEmptyAlert(true);
-    } else {
+      return;
+    }
+    try {
+      const items = cart.map(({ _id, qty }) => ({ product: { _id }, qty }));
+      const response = await api.put(
+        "/api/carts",
+        { items },
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("response cart checkout :", response.data);
       setTimeout(() => {
         nav("/address-select");
       }, 1000);
+    } catch (err) {
+      console.error("Error during checkout", err.message);
     }
   };
 
