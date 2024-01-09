@@ -3,7 +3,11 @@ import { Link } from "react-router-dom";
 
 export const ProductCard = ({ product }) => {
   if (!product) {
-    return <div>Error: Product data is missing</div>;
+    return (
+      <div className="flex justify-center items-center">
+        No Product Here! Please wait a several days.
+      </div>
+    );
   }
   const { image_url, name, category, tags, price } = product;
 

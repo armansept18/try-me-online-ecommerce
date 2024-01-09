@@ -129,7 +129,19 @@ export const ProductPage = () => {
             categories={categories}
             selectedCategory={selectedCategory}
           />
-          <ProductList products={[...products]} fetchProduct={fetchProduct} />
+          {products.length === 0 ? (
+            <Typography
+              mt={10}
+              mb={10}
+              fontFamily="Quicksand"
+              textAlign="center"
+            >
+              There is no data! <br />
+              Please wait several days.
+            </Typography>
+          ) : (
+            <ProductList products={[...products]} fetchProduct={fetchProduct} />
+          )}
           <Box
             sx={{
               display: "flex",
@@ -138,19 +150,28 @@ export const ProductPage = () => {
             }}
           >
             <Button onClick={handlePrevPage}>
-              <ArrowBack />
+              <ArrowBack sx={{ color: "#F37725" }} />
             </Button>
             {Array.from({ length: totalPages }, (_, index) => (
               <Button
                 key={index + 1}
-                variant={currentPage === index + 1 ? "contained" : ""}
+                variant={currentPage === index + 1 ? "outlined" : ""}
                 onClick={() => handlePageChange(index + 1)}
+                sx={{
+                  fontFamily: "Quicksand",
+                  fontWeight: "700",
+                  border: "transparent",
+                  color: "#F37725",
+                  "&:hover": {
+                    border: "transparent",
+                  },
+                }}
               >
                 {index + 1}
               </Button>
             ))}
             <Button onClick={handleNextPage}>
-              <ArrowForward />
+              <ArrowForward sx={{ color: "#F37725" }} />
             </Button>
           </Box>
         </Box>

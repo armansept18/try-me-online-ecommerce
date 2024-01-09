@@ -55,7 +55,7 @@ export const Footer = () => {
         <StyledNavButton href="/home">Home</StyledNavButton>
         <StyledNavButton href="/products">Products</StyledNavButton>
         <StyledNavButton>About</StyledNavButton>
-        <StyledNavButton>Account</StyledNavButton>
+        <StyledNavButton href="/account">Account</StyledNavButton>
       </Box>
       <Box>
         <Divider variant="middle" sx={{ marginTop: "64px" }} />

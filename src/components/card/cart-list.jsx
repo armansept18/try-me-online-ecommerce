@@ -1,5 +1,6 @@
-import { Box, Button, Card, Grid, IconButton, Typography } from "@mui/material";
+import { Box, Card, Grid, IconButton, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useCart } from "../../hoc/cart-context";
 
 export const CartCard = ({ product, onRemove, onIncrement, onDecrement }) => {
   const { image_url, name, price, qty } = product;
@@ -72,12 +73,15 @@ export const CartCard = ({ product, onRemove, onIncrement, onDecrement }) => {
 };
 
 export const CartList = ({ products, setProducts }) => {
+  const { updateCartBadge } = useCart();
+
   const incrementQty = (index) => {
     const updatedProducts = [...products];
     updatedProducts[index].qty += 1;
     setProducts(updatedProducts);
 
     localStorage.setItem("cart", JSON.stringify(updatedProducts));
+    updateCartBadge(updatedProducts);
   };
 
   const decrementQty = (index) => {
@@ -87,6 +91,7 @@ export const CartList = ({ products, setProducts }) => {
       setProducts(updatedProducts);
 
       localStorage.setItem("cart", JSON.stringify(updatedProducts));
+      updateCartBadge(updatedProducts);
     }
   };
 
@@ -96,6 +101,7 @@ export const CartList = ({ products, setProducts }) => {
     setProducts(updatedProducts);
 
     localStorage.setItem("cart", JSON.stringify(updatedProducts));
+    updateCartBadge(updatedProducts);
   };
 
   const calculateTotal = () => {

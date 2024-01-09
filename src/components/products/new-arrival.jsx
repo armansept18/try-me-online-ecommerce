@@ -72,7 +72,14 @@ export const NewArrivalProducts = () => {
           </Button>
         </Box>
       </Box>
-      <ProductList products={products} />
+      {products.length === 0 ? (
+        <Typography mt={10} fontFamily="Quicksand" textAlign="center">
+          There is no data! <br />
+          Please wait several days.
+        </Typography>
+      ) : (
+        <ProductList products={products} />
+      )}
     </Paper>
   );
 };

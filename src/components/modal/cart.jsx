@@ -68,10 +68,16 @@ export const CartModal = ({ open, onClose }) => {
       />
       <DialogTitle>Your Cart</DialogTitle>
       <DialogContent>
-        <Box>
-          <Typography>Product List</Typography>
-        </Box>
-        <CartList products={products} setProducts={setProducts} />
+        {products.length === 0 ? (
+          <Typography textAlign="center">No products in your cart.</Typography>
+        ) : (
+          <>
+            <Box>
+              <Typography>Product List</Typography>
+            </Box>
+            <CartList products={products} setProducts={setProducts} />
+          </>
+        )}
       </DialogContent>
       <DialogActions>
         <Button

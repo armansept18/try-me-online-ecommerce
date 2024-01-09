@@ -18,6 +18,7 @@ import { useSelector } from "react-redux";
 import { InvoiceModal } from "../../components/modal/invoice";
 import {
   AddressNotSelected,
+  ErrorCartEmpty,
   SuccessCheckout,
 } from "../../components/alert/alert";
 import { CheckoutConfirmation } from "../../components/modal/checkout-confirmation";
@@ -28,8 +29,11 @@ export const AddressSelectionPage = () => {
   const nav = useNavigate();
   const userSelector = useSelector((state) => state.auth);
   const [confirmationModal, setConfirmationModal] = useState(false);
+  const [errorCartEmpty, setErrorCartEmpty] = useState(false);
   const [successCheckoutAlert, setSuccessCheckoutAlert] = useState(false);
   const [addressSelectAlert, setAddressSelectAlert] = useState(false);
+
+  const cart = JSON.parse(localStorage.getItem("cart"));
 
   const fetchUserAddress = async () => {
     try {
@@ -52,7 +56,12 @@ export const AddressSelectionPage = () => {
   };
 
   const handleCheckout = () => {
-    if (!selectedAddress) {
+    if (!cart || cart.length === 0) {
+      setErrorCartEmpty(true);
+      setTimeout(() => {
+        nav("/home");
+      }, 2000);
+    } else if (!selectedAddress) {
       setAddressSelectAlert(true);
     } else {
       setConfirmationModal(true);
@@ -77,6 +86,10 @@ export const AddressSelectionPage = () => {
         onOpen={confirmationModal}
         onClose={() => setConfirmationModal(false)}
         selectedAddress={selectedAddress}
+      />
+      <ErrorCartEmpty
+        onOpen={errorCartEmpty}
+        onClose={() => setErrorCartEmpty(false)}
       />
       <Box
         display="flex"

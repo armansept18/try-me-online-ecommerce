@@ -18,9 +18,10 @@ import { AccountCircle, ShoppingCart } from "@mui/icons-material";
 import MenuIcon from "@mui/icons-material/Menu";
 import Logo from "../../public/images/logo.png";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { LogoutModal } from "../modal/logout";
 import { CartModal } from "../modal/cart";
+import { useCart } from "../../hoc/cart-context";
 
 const HideOnScroll = ({ children }) => {
   const trigger = useScrollTrigger();
@@ -59,8 +60,7 @@ export const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [openLogoutModal, setOpenLogoutModal] = useState(false);
   const [openCartModal, setOpenCartModal] = useState(false);
-  const [cart, setCart] = useState([]);
-  const [totalQuantity, setTotalQuantity] = useState(0);
+  const { cartBadge } = useCart();
 
   const handleOpenNav = (event) => setAnchorNav(event.currentTarget);
   const handleCloseNav = () => setAnchorNav(null);
@@ -71,22 +71,9 @@ export const Navbar = () => {
     setOpenLogoutModal(true);
   };
 
-  const updateCart = () => {
-    const updatedCart = JSON.parse(localStorage.getItem("cart")) || [];
-    setCart(updatedCart);
-    const newTotalQuantity = updatedCart.reduce(
-      (total, item) => total + item.qty,
-      0
-    );
-    setTotalQuantity(newTotalQuantity);
-  };
   const handleCartClicked = () => {
     setOpenCartModal(true);
-    updateCart();
   };
-  useEffect(() => {
-    updateCart();
-  }, []);
 
   useEffect(() => {
     const token = localStorage.getItem("auth");
@@ -150,7 +137,7 @@ export const Navbar = () => {
               <ImageList sx={{ display: { xs: "flex", md: "none" } }}>
                 <img
                   src={Logo}
-                  alt=""
+                  alt="Logo"
                   style={{
                     maxWidth: "180px",
                     maxHeight: "61px",
@@ -210,7 +197,7 @@ export const Navbar = () => {
                 <Box>
                   <IconButton aria-label="cart" onClick={handleCartClicked}>
                     <StyledBadge
-                      badgeContent={totalQuantity || "0"}
+                      badgeContent={cartBadge || "0"}
                       color="error"
                       max={99}
                     >

@@ -17,6 +17,8 @@ import { DeleteProductModal } from "../../components/modal/delete-product";
 import { ProductModal } from "../../components/modal/product";
 import { SuccessAddToCart } from "../../components/alert/alert";
 import { enqueueSnackbar } from "notistack";
+import { useCart } from "../../hoc/cart-context";
+import { LoadingPage } from "../../components/navigation/loading";
 
 export const ProductDetail = () => {
   const { productId } = useParams();
@@ -26,7 +28,9 @@ export const ProductDetail = () => {
   const [openProductModal, setOpenProductModal] = useState(false);
   const [openCartModal, setOpenCartModal] = useState(false);
   const [alertAddToCart, setAlertAddToCart] = useState(false);
+  const [error, setError] = useState(null);
   const userRole = useSelector((state) => state.auth.user?.role);
+  const { updateCartBadge } = useCart();
 
   const fetchProductDetail = async () => {
     try {
@@ -34,6 +38,7 @@ export const ProductDetail = () => {
       setProductDetails(response.data.product);
     } catch (err) {
       console.log("Error fetching event details :", err);
+      setError("500: Internal Server Error");
     } finally {
       setIsLoading(false);
     }
@@ -64,6 +69,8 @@ export const ProductDetail = () => {
     localStorage.setItem("cart", JSON.stringify(existingCart));
     setAlertAddToCart(true);
     setOpenCartModal(true);
+
+    updateCartBadge(existingCart);
   };
 
   useEffect(() => {
@@ -71,7 +78,17 @@ export const ProductDetail = () => {
   }, [productId]);
 
   if (isLoading) {
-    return <CircularProgress />;
+    return <LoadingPage />;
+  }
+
+  if (error) {
+    return (
+      <Box p={2} display="flex" justifyContent="center" alignItems="center">
+        <Typography variant="h4" color="error">
+          {error}
+        </Typography>
+      </Box>
+    );
   }
 
   return (
@@ -108,7 +125,7 @@ export const ProductDetail = () => {
           }}
         >
           <img
-            src={`http://localhost:5000/static/${productDetails.image_url}`}
+            src={`http://localhost:5000/static/${productDetails?.image_url}`}
             alt="Product Detail"
             style={{
               borderRadius: "10px",
@@ -123,7 +140,7 @@ export const ProductDetail = () => {
           />
           <Box maxWidth="616px">
             <Typography fontFamily="Quicksand" fontSize="40px" fontWeight="700">
-              {productDetails.name || "Product Name"}
+              {productDetails?.name || "Product Name"}
             </Typography>
             <Typography
               marginTop="8px"
@@ -131,7 +148,7 @@ export const ProductDetail = () => {
               fontSize="24px"
               fontWeight="700"
             >
-              IDR {Number(productDetails.price).toLocaleString("id-ID")}
+              IDR {Number(productDetails?.price).toLocaleString("id-ID")}
             </Typography>
             <Typography
               fontFamily="Quicksand"
@@ -139,7 +156,7 @@ export const ProductDetail = () => {
               fontWeight="500"
               marginTop="24px"
             >
-              {productDetails.description ||
+              {productDetails?.description ||
                 "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptateaut perspiciatis beatae non eum! Veritatis dicta ad, obcaecati accusantium, aperiam illo debitis, eius sed sequi temporibus praesentium sit illum atque!"}
             </Typography>
             {userRole === "admin" && (

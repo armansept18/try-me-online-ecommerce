@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { isTokenExpired } from "./middlewares/auth-action";
 import { SessionExpired } from "./components/alert/alert";
 import { LoadingPage } from "./components/navigation/loading";
+import { CartProvider } from "./hoc/cart-context";
 
 function App() {
   const [sessionAlert, setSessionAlert] = useState(false);
@@ -29,21 +30,23 @@ function App() {
     }, 2800);
   }, []);
   return (
-    <>
-      {loading ? (
-        <LoadingPage />
-      ) : (
-        <Routes>
-          {routes.map((route, i) => (
-            <Route {...route} key={i} />
-          ))}
-        </Routes>
-      )}
-      <SessionExpired
-        onOpen={sessionAlert}
-        onClose={() => setSessionAlert(false)}
-      />
-    </>
+    <CartProvider>
+      <>
+        {loading ? (
+          <LoadingPage />
+        ) : (
+          <Routes>
+            {routes.map((route, i) => (
+              <Route {...route} key={i} />
+            ))}
+          </Routes>
+        )}
+        <SessionExpired
+          onOpen={sessionAlert}
+          onClose={() => setSessionAlert(false)}
+        />
+      </>
+    </CartProvider>
   );
 }
 

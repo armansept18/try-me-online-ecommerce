@@ -473,3 +473,27 @@ export const FailedCheckout = ({ onOpen, onClose }) => {
     </Snackbar>
   );
 };
+export const ErrorCartEmpty = ({ onOpen, onClose }) => {
+  const [state, setState] = useState({
+    open: false,
+    vertical: "top",
+    horizontal: "center",
+  });
+  const { vertical, horizontal, open } = state;
+  return (
+    <Snackbar
+      anchorOrigin={{ vertical, horizontal }}
+      open={onOpen}
+      onClose={onClose}
+      key={(vertical, horizontal)}
+      autoHideDuration={2000}
+    >
+      <Alert severity="error">
+        <AlertTitle>
+          Error! - Your cart is empty. <br />
+          &nbsp; &nbsp; &nbsp; &nbsp; Redirecting...
+        </AlertTitle>
+      </Alert>
+    </Snackbar>
+  );
+};
