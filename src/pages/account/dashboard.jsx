@@ -1,4 +1,4 @@
-import { Box, Button, Tab, Typography } from "@mui/material";
+import { Box, Button, Card, CardContent, Tab, Typography } from "@mui/material";
 import { Navbar } from "../../components/navigation/navbar";
 import { Footer } from "../../components/footer/footer";
 import * as React from "react";
@@ -8,6 +8,7 @@ import { TabContext, TabList } from "@mui/lab";
 import { AddressList } from "../../components/profile/address-list";
 import { api } from "../../api/axios";
 import { DeleteAccount } from "../../components/alert/alert";
+import { InvoiceModal } from "../../components/modal/invoice";
 
 export const Dashboard = () => {
   const [value, setValue] = React.useState("1");
@@ -15,6 +16,9 @@ export const Dashboard = () => {
   const [deleteAccountAlert, setDeleteAccountAlert] = React.useState(false);
 
   const [userAddresses, setUserAddresses] = React.useState([]);
+  const [invoices, setInvoices] = React.useState([]);
+  const [selectedInvoice, setSelectedInvoice] = React.useState(null);
+  const [invoiceModalOpen, setInvoiceModalOpen] = React.useState(false);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -29,6 +33,32 @@ export const Dashboard = () => {
   const handleDeleteAccount = async () => {
     setDeleteAccountAlert(true);
   };
+
+  const handleInvoiceCardClick = (orderId) => {
+    setSelectedInvoice(orderId);
+    setInvoiceModalOpen(true);
+  };
+
+  const handleCloseInvoiceModal = () => {
+    setInvoiceModalOpen(false);
+  };
+
+  React.useEffect(() => {
+    const fetchInvoices = async () => {
+      try {
+        const token = localStorage.getItem("auth");
+        const response = await api.get("/api/orders", {
+          headers: { authorization: `Bearer ${token}` },
+        });
+        console.log("fetch invoice:", response.data.orders);
+        setInvoices(response.data?.orders);
+      } catch (error) {
+        console.error("Error fetching invoices:", error);
+      }
+    };
+
+    fetchInvoices();
+  }, []);
 
   React.useEffect(() => {
     const fetchAddresses = async () => {
@@ -49,12 +79,26 @@ export const Dashboard = () => {
     fetchAddresses();
   }, []);
 
+  const totalAmount = (invoice) => {
+    return (
+      invoice.cart.reduce(
+        (acc, product) => acc + product.price * product.qty,
+        0
+      ) + invoice.delivery_fee
+    ).toLocaleString("id-ID");
+  };
+
   return (
     <>
       <Navbar />
       <DeleteAccount
         onOpen={deleteAccountAlert}
         onClose={() => setDeleteAccountAlert(false)}
+      />
+      <InvoiceModal
+        onOpen={invoiceModalOpen}
+        onClose={handleCloseInvoiceModal}
+        orderId={selectedInvoice}
       />
       <Box
         sx={{
@@ -105,6 +149,26 @@ export const Dashboard = () => {
             <Typography variant="h5" component="h5" fontFamily="Quicksand">
               Order List
             </Typography>
+            {invoices.map((invoice) => (
+              <Card
+                key={invoice._id}
+                sx={{ cursor: "pointer", marginTop: "10px" }}
+                onClick={() => handleInvoiceCardClick(invoice._id)}
+              >
+                <CardContent>
+                  <Typography fontFamily="Quicksand" fontWeight="600">
+                    Order ID: INV-00{invoice._id}A
+                  </Typography>
+                  <Typography fontFamily="Quicksand">
+                    Date:{" "}
+                    {new Date(invoice.createdAt).toLocaleDateString("id-ID")}
+                  </Typography>
+                  <Typography fontFamily="Quicksand" fontWeight="600">
+                    Total Amount: IDR {totalAmount(invoice)}
+                  </Typography>
+                </CardContent>
+              </Card>
+            ))}
           </TabPanel>
           <TabPanel value="3">
             <Box

@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Dialog,
   DialogActions,
   DialogContent,
@@ -50,9 +49,11 @@ export const InvoiceModal = ({ onOpen, onClose, orderId }) => {
   }, [onOpen, orderId]);
 
   const handlePrint = () => {
-    setLoading(true);
     setPrintAlert(true);
+    setLoading(true);
     setTimeout(() => {
+      setLoading(false);
+      window.print();
       nav("/account");
     }, 3000);
   };
@@ -77,10 +78,21 @@ export const InvoiceModal = ({ onOpen, onClose, orderId }) => {
       </DialogTitle>
 
       <DialogContent>
-        <Box display="flex" justifyContent="space-between" mt={2}>
+        <Typography fontFamily="Quicksand">
+          {new Date(invoiceData.order?.createdAt).toLocaleDateString("id-ID", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: false,
+          })}
+        </Typography>
+        <Box display="flex" justifyContent="space-between" mt={4}>
           <Typography fontFamily="Quicksand">Order ID :</Typography>
           <Typography fontFamily="Quicksand">
-            INV00{invoiceData.order?._id}A
+            INV-00{invoiceData.order?._id}A
           </Typography>
         </Box>
         <Divider />
