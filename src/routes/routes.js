@@ -1,3 +1,4 @@
+import { LoadingPage } from "../components/navigation/loading";
 import { Dashboard } from "../pages/account/dashboard";
 import { LoginPage } from "../pages/account/login";
 import { RegisterPage } from "../pages/account/register";

@@ -4,9 +4,12 @@ import { routes } from "./routes/routes";
 import { useEffect, useState } from "react";
 import { isTokenExpired } from "./middlewares/auth-action";
 import { SessionExpired } from "./components/alert/alert";
+import { LoadingPage } from "./components/navigation/loading";
 
 function App() {
   const [sessionAlert, setSessionAlert] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const handleTokenExpiration = () => {
     const token = localStorage.getItem("auth");
     if (token && isTokenExpired(token)) {
@@ -20,19 +23,26 @@ function App() {
   };
   useEffect(() => {
     handleTokenExpiration();
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 2800);
   }, []);
   return (
     <>
+      {loading ? (
+        <LoadingPage />
+      ) : (
+        <Routes>
+          {routes.map((route, i) => (
+            <Route {...route} key={i} />
+          ))}
+        </Routes>
+      )}
       <SessionExpired
         onOpen={sessionAlert}
         onClose={() => setSessionAlert(false)}
       />
-      <Routes>
-        {routes.map((route, i) => (
-          <Route {...route} key={i} />
-        ))}
-      </Routes>
-      ;
     </>
   );
 }

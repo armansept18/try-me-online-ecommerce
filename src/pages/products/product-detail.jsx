@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import { Navbar } from "../../components/navigation/navbar";
 import { Footer } from "../../components/footer/footer";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { api } from "../../api/axios";
 import { useEffect, useState } from "react";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
