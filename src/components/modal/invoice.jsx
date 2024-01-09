@@ -24,7 +24,6 @@ export const InvoiceModal = ({ onOpen, onClose, orderId }) => {
   const fetchInvoiceData = async () => {
     try {
       if (!orderId) {
-        console.error("Order ID is undefined");
         return;
       }
 
@@ -34,7 +33,6 @@ export const InvoiceModal = ({ onOpen, onClose, orderId }) => {
           authorization: `Bearer ${token}`,
         },
       });
-      console.log("Fetch invoice :", response.data);
       setInvoiceData(response.data);
     } catch (err) {
       console.error("Error fetch invoice :", err.message);
@@ -45,7 +43,6 @@ export const InvoiceModal = ({ onOpen, onClose, orderId }) => {
     if (onOpen) {
       fetchInvoiceData();
     }
-    console.log("OrderId in useEffect :", orderId);
   }, [onOpen, orderId]);
 
   const handlePrint = () => {

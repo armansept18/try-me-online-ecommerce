@@ -23,9 +23,7 @@ export const CartModal = ({ open, onClose }) => {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     const token = localStorage.getItem("auth");
     if (!token) {
-      setTimeout(() => {
-        setNeedLoginAlert(true);
-      }, 2000);
+      setNeedLoginAlert(true);
       return;
     }
 

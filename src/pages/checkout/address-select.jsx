@@ -60,7 +60,6 @@ export const AddressSelectionPage = () => {
   };
 
   useEffect(() => {
-    console.log("Selected address in useeffect :", selectedAddress);
     fetchUserAddress();
   }, []);
 

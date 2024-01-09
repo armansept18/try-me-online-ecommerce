@@ -50,7 +50,6 @@ export const Dashboard = () => {
         const response = await api.get("/api/orders", {
           headers: { authorization: `Bearer ${token}` },
         });
-        console.log("fetch invoice:", response.data.orders);
         setInvoices(response.data?.orders);
       } catch (error) {
         console.error("Error fetching invoices:", error);
