@@ -2,6 +2,9 @@ import { Box, Grid } from "@mui/material";
 import { ProductCard } from "../card/product-card";
 import { useEffect, useState } from "react";
 import { ProductCardSkeleton } from "../card/skeleton/product-skeleton";
+import { motion } from "framer-motion";
+
+const visible = { opacity: 1, y: 0, transition: { duration: 2 } };
 
 export const ProductList = ({ products }) => {
   const [loading, setLoading] = useState(false);
@@ -34,7 +37,18 @@ export const ProductList = ({ products }) => {
           ))
         : products.map((product) => (
             <Grid item key={product.id} xs={8} sm={4} md={3}>
-              <ProductCard product={product} />
+              <motion.div
+                initial="hidden"
+                whileInView="visible"
+                exit={{ opacity: 0, transition: { duration: 2 } }}
+                viewport={{ once: true }}
+                variants={{
+                  hidden: { opacity: 0, y: 100 },
+                  visible,
+                }}
+              >
+                <ProductCard product={product} />
+              </motion.div>
             </Grid>
           ))}
     </Box>

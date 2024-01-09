@@ -8,6 +8,9 @@ import { api } from "../../api/axios";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import { ProductModal } from "../../components/modal/product";
 import { CategoryModal } from "../../components/modal/category";
+import { motion } from "framer-motion";
+
+const visible = { opacity: 1, x: 0, y: 0, transition: { duration: 3 } };
 
 export const ProductPage = () => {
   const [products, setProducts] = useState([]);
@@ -64,13 +67,17 @@ export const ProductPage = () => {
   const handleNextPage = () => {
     const nextPage = currentPage + 1;
     if (nextPage <= totalPages) {
-      fetchProduct(nextPage);
+      setTimeout(() => {
+        fetchProduct(nextPage);
+      }, 500);
     }
   };
   const handlePrevPage = () => {
     const prevPage = currentPage - 1;
     if (prevPage >= 1) {
-      fetchProduct(prevPage);
+      setTimeout(() => {
+        fetchProduct(prevPage);
+      }, 500);
     }
   };
 
@@ -104,31 +111,61 @@ export const ProductPage = () => {
             alignItems: "center",
           }}
         >
-          <Box
-            marginBottom="80px"
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            exit={{ opacity: 0, transition: { duration: 2 } }}
+            viewport={{ once: true }}
+            variants={{
+              hidden: { opacity: 0, y: -100 },
+              visible,
             }}
           >
-            <Typography fontFamily="Quicksand" fontSize="16px">
-              PRODUCTS
-            </Typography>
-            <Typography fontFamily="Russo One" fontSize="48px" marginTop="16px">
-              Your Products Here
-            </Typography>
-            <Typography fontFamily="Quicksand" fontSize="16px" marginTop="24px">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            </Typography>
-          </Box>
-          <SearchBar
-            onSearch={handleSearch}
-            onCategoryChange={handleCategoryChange}
-            categories={categories}
-            selectedCategory={selectedCategory}
-          />
+            <Box
+              marginBottom="80px"
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Typography fontFamily="Quicksand" fontSize="16px">
+                PRODUCTS
+              </Typography>
+              <Typography
+                fontFamily="Russo One"
+                fontSize="48px"
+                marginTop="16px"
+              >
+                Your Products Here
+              </Typography>
+              <Typography
+                fontFamily="Quicksand"
+                fontSize="16px"
+                marginTop="24px"
+              >
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              </Typography>
+            </Box>
+          </motion.div>
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            exit={{ opacity: 0, transition: { duration: 2 } }}
+            viewport={{ once: true }}
+            variants={{
+              hidden: { opacity: 0, x: -50 },
+              visible,
+            }}
+          >
+            <SearchBar
+              onSearch={handleSearch}
+              onCategoryChange={handleCategoryChange}
+              categories={categories}
+              selectedCategory={selectedCategory}
+            />
+          </motion.div>
           {products.length === 0 ? (
             <Typography
               mt={10}
@@ -160,11 +197,7 @@ export const ProductPage = () => {
                 sx={{
                   fontFamily: "Quicksand",
                   fontWeight: "700",
-                  border: "transparent",
                   color: "#F37725",
-                  "&:hover": {
-                    border: "transparent",
-                  },
                 }}
               >
                 {index + 1}

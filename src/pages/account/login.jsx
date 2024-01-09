@@ -5,6 +5,7 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import {
+  Box,
   Button,
   FormControl,
   IconButton,
@@ -244,7 +245,9 @@ export const LoginPage = () => {
           </Card>
         </motion.div>
       </Paper>
-      <Footer />
+      <Box mt={50}>
+        <Footer />
+      </Box>
     </>
   );
 };

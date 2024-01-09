@@ -19,6 +19,9 @@ import { SuccessAddToCart } from "../../components/alert/alert";
 import { enqueueSnackbar } from "notistack";
 import { useCart } from "../../hoc/cart-context";
 import { LoadingPage } from "../../components/navigation/loading";
+import { motion } from "framer-motion";
+
+const visible = { opacity: 1, x: 0, y: 0, transition: { duration: 3 } };
 
 export const ProductDetail = () => {
   const { productId } = useParams();
@@ -124,41 +127,73 @@ export const ProductDetail = () => {
             gap: "80px",
           }}
         >
-          <img
-            src={`http://localhost:5000/static/${productDetails?.image_url}`}
-            alt="Product Detail"
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            exit={{ opacity: 0, transition: { duration: 1 } }}
+            variants={{ visible: { transition: { staggerChildren: 0.9 } } }}
             style={{
-              borderRadius: "10px",
-              boxShadow: "8px 12px 20px -2px rgba(0,0,0, 2)",
-              maxHeight: "568px",
-              height: "auto",
-              maxWidth: "360px",
-              width: "100%",
-              aspectRatio: 1,
-              objectFit: "fill",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
             }}
-          />
+          >
+            <motion.img
+              variants={{
+                hidden: { opacity: 0, x: -100 },
+                visible,
+              }}
+              src={`http://localhost:5000/static/${productDetails?.image_url}`}
+              alt="Product Detail"
+              style={{
+                borderRadius: "10px",
+                boxShadow: "8px 12px 20px -2px rgba(0,0,0, 2)",
+                maxHeight: "568px",
+                height: "auto",
+                maxWidth: "360px",
+                width: "100%",
+                aspectRatio: 1,
+                objectFit: "fill",
+              }}
+            />
+          </motion.div>
           <Box maxWidth="616px">
-            <Typography fontFamily="Quicksand" fontSize="40px" fontWeight="700">
-              {productDetails?.name || "Product Name"}
-            </Typography>
-            <Typography
-              marginTop="8px"
-              fontFamily="Quicksand"
-              fontSize="24px"
-              fontWeight="700"
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              exit={{ opacity: 0, transition: { duration: 2 } }}
+              viewport={{ once: true }}
+              variants={{
+                hidden: { opacity: 0, x: 100 },
+                visible,
+              }}
             >
-              IDR {Number(productDetails?.price).toLocaleString("id-ID")}
-            </Typography>
-            <Typography
-              fontFamily="Quicksand"
-              fontSize="16px"
-              fontWeight="500"
-              marginTop="24px"
-            >
-              {productDetails?.description ||
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptateaut perspiciatis beatae non eum! Veritatis dicta ad, obcaecati accusantium, aperiam illo debitis, eius sed sequi temporibus praesentium sit illum atque!"}
-            </Typography>
+              <Typography
+                fontFamily="Quicksand"
+                fontSize="40px"
+                fontWeight="700"
+              >
+                {productDetails?.name || "Product Name"}
+              </Typography>
+              <Typography
+                marginTop="8px"
+                fontFamily="Quicksand"
+                fontSize="24px"
+                fontWeight="700"
+              >
+                IDR {Number(productDetails?.price).toLocaleString("id-ID")}
+              </Typography>
+              <Typography
+                fontFamily="Quicksand"
+                fontSize="16px"
+                fontWeight="500"
+                marginTop="24px"
+              >
+                {productDetails?.description ||
+                  "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptateaut perspiciatis beatae non eum! Veritatis dicta ad, obcaecati accusantium, aperiam illo debitis, eius sed sequi temporibus praesentium sit illum atque!"}
+              </Typography>
+            </motion.div>
             {userRole === "admin" && (
               <Box display="flex" justifyContent="end" gap={2}>
                 <SettingsOutlinedIcon
@@ -183,27 +218,37 @@ export const ProductDetail = () => {
                 />
               </Box>
             )}
-
-            <Button
-              variant="contained"
-              fullWidth
-              sx={{
-                marginTop: "160px",
-                color: "#252525",
-                fontFamily: "Quicksand",
-                fontWeight: "700",
-                borderRadius: "100px",
-                background: "#F6E6CD",
-                boxShadow: "0px 24px 48px 0px rgba(0, 0, 0, 0.18)",
-                "&:hover": {
-                  backgroundColor: "#F37725",
-                  color: "#F5F5F5",
-                },
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              exit={{ opacity: 0, transition: { duration: 2 } }}
+              viewport={{ once: true }}
+              variants={{
+                hidden: { opacity: 0, y: 100 },
+                visible,
               }}
-              onClick={handleAddToCart("success")}
             >
-              Add To Cart
-            </Button>
+              <Button
+                variant="contained"
+                fullWidth
+                sx={{
+                  marginTop: "160px",
+                  color: "#252525",
+                  fontFamily: "Quicksand",
+                  fontWeight: "700",
+                  borderRadius: "100px",
+                  background: "#F6E6CD",
+                  boxShadow: "0px 24px 48px 0px rgba(0, 0, 0, 0.18)",
+                  "&:hover": {
+                    backgroundColor: "#F37725",
+                    color: "#F5F5F5",
+                  },
+                }}
+                onClick={handleAddToCart("success")}
+              >
+                Add To Cart
+              </Button>
+            </motion.div>
           </Box>
         </Box>
       </Paper>
@@ -211,7 +256,9 @@ export const ProductDetail = () => {
         onOpen={alertAddToCart}
         onClose={() => setAlertAddToCart(false)}
       />
-      <Footer />
+      <Box mt={40}>
+        <Footer />
+      </Box>
     </>
   );
 };
