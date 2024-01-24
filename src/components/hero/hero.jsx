@@ -35,7 +35,10 @@ export const Hero = () => {
             visible,
           }}
         >
-          <Typography fontFamily="Russo One" fontSize={{ xs: 24, md: 32 }}>
+          <Typography
+            fontFamily="Russo One"
+            fontSize={{ xs: "36px", md: "48px" }}
+          >
             Try Me Online Ecommerce
           </Typography>
         </motion.div>
@@ -45,7 +48,7 @@ export const Hero = () => {
           viewport={{ once: true }}
           exit={{ opacity: 0, transition: { duration: 2 } }}
           variants={{
-            hidden: { opacity: 0, x: 50 },
+            hidden: { opacity: 0, y: 50 },
             visible,
           }}
         >
@@ -66,7 +69,7 @@ export const Hero = () => {
           viewport={{ once: true }}
           exit={{ opacity: 0, transition: { duration: 2 } }}
           variants={{
-            hidden: { opacity: 0, x: -50 },
+            hidden: { opacity: 0, x: 50 },
             visible,
           }}
         >

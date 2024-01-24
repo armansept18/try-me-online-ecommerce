@@ -18,7 +18,7 @@ export const Homepage = () => {
         viewport={{ once: true }}
         exit={{ opacity: 0, transition: { duration: 2 } }}
         variants={{
-          hidden: { opacity: 0, x: -100 },
+          hidden: { opacity: 0, x: -50 },
           visible,
         }}
       >
@@ -30,7 +30,7 @@ export const Homepage = () => {
         exit={{ opacity: 0, transition: { duration: 2 } }}
         viewport={{ once: true }}
         variants={{
-          hidden: { opacity: 0, x: 100 },
+          hidden: { opacity: 0, x: -50 },
           visible,
         }}
       >

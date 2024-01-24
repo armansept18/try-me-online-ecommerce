@@ -47,7 +47,11 @@ export const TrendingProducts = () => {
           <Typography fontSize="16px" fontFamily="Quicksand">
             TRENDING
           </Typography>
-          <Typography fontSize="48px" fontWeight="400" fontFamily="Russo One">
+          <Typography
+            fontSize={{ xs: "36px", md: "48px" }}
+            fontWeight="400"
+            fontFamily="Russo One"
+          >
             Trending Products
           </Typography>
           <Box>
