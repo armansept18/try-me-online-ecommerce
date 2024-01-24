@@ -69,7 +69,7 @@ export const Hero = () => {
           viewport={{ once: true }}
           exit={{ opacity: 0, transition: { duration: 2 } }}
           variants={{
-            hidden: { opacity: 0, x: 50 },
+            hidden: { opacity: 0, x: -50 },
             visible,
           }}
         >
