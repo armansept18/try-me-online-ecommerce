@@ -1,4 +1,3 @@
-import { Carousel } from "../../components/carousel/carousel";
 import { Footer } from "../../components/footer/footer";
 import { Hero } from "../../components/hero/hero";
 import { Navbar } from "../../components/navigation/navbar";
@@ -12,7 +11,6 @@ export const Homepage = () => {
   return (
     <>
       <Navbar />
-      {/* <Carousel /> */}
       <Hero />
       <motion.div
         initial="hidden"
