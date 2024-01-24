@@ -37,6 +37,7 @@ export const NewArrivalProducts = () => {
       <Box
         display="flex"
         justifyContent="space-between"
+        flexDirection={{ xs: "column", md: "row" }}
         maxWidth="1368px"
         width="100vw"
       >
@@ -53,11 +54,15 @@ export const NewArrivalProducts = () => {
             </Typography>
           </Box>
         </Box>
-        <Box display="flex" justifyContent="center" alignItems="flex-end">
+        <Box
+          display="flex"
+          justifyContent={{ xs: "flex-end", md: "flex-end" }}
+          alignItems={{ xs: "flex-end", md: "center" }}
+        >
           <Button
             variant="outlined"
             sx={{
-              borderRadius: "100px",
+              borderRadius: "20px",
               border: "solid 2px #252525",
               color: "#252525",
               "&:hover": {
@@ -75,7 +80,7 @@ export const NewArrivalProducts = () => {
       {products.length === 0 ? (
         <Typography mt={10} fontFamily="Quicksand" textAlign="center">
           There is no data! <br />
-          Please wait several days.
+          Please contact administrator.
         </Typography>
       ) : (
         <ProductList products={products} />

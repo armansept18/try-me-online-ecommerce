@@ -54,7 +54,6 @@ export const Carousel = () => {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          maxWidth: "1368px",
         }}
       >
         <AutoplayCarousels
@@ -69,13 +68,14 @@ export const Carousel = () => {
                 <Box
                   component="img"
                   sx={{
-                    height: 325,
+                    maxHeight: "325px",
+
                     display: "block",
                     // overflow: "hidden",
-                    width: "100vw",
+                    width: "100%",
                     borderRadius: "20px",
-                    aspectRatio: 1,
-                    objectFit: "fill",
+                    aspectRatio: "16/9",
+                    objectFit: "cover",
                   }}
                   src={step.image}
                 />

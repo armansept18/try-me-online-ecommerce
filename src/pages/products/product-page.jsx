@@ -174,7 +174,7 @@ export const ProductPage = () => {
               textAlign="center"
             >
               There is no data! <br />
-              Please wait several days.
+              Please contact administrator.
             </Typography>
           ) : (
             <ProductList products={[...products]} fetchProduct={fetchProduct} />
