@@ -4,13 +4,13 @@ import Carousel3 from "../../public/images/carousels/carasun2.jpg";
 import Carousel4 from "../../public/images/carousels/signup-femaledaily.webp";
 import Carousel5 from "../../public/images/carousels/big-sale.jpg";
 import Carousel6 from "../../public/images/carousels/1000_F_391335517_DEvRGQQyhkJEtE5crO2PNGlWuFvxvtvz.jpg";
-import SwipeableViews from "react-swipeable-views";
-import { autoPlay } from "react-swipeable-views-utils";
+// import SwipeableViews from "react-swipeable-views";
+// import { autoPlay } from "react-swipeable-views-utils";
 import { Box, Button, MobileStepper, useTheme } from "@mui/material";
 import { useState } from "react";
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
 
-const AutoplayCarousels = autoPlay(SwipeableViews);
+// const AutoplayCarousels = autoPlay(SwipeableViews);
 const imageData = [
   { image: Carousel1 },
   { image: Carousel2 },
@@ -56,33 +56,33 @@ export const Carousel = () => {
           alignItems: "center",
         }}
       >
-        <AutoplayCarousels
+        {/* <AutoplayCarousels
           axis={theme.direction === "rtl" ? "x-reverse" : "x"}
           index={activeStep}
           onChangeIndex={handleStepChange}
           enableMouseEvents
-        >
-          {imageData.map((step, index) => (
-            <div key={step.label}>
-              {Math.abs(activeStep - index) <= 2 ? (
-                <Box
-                  component="img"
-                  sx={{
-                    maxHeight: "325px",
+        > */}
+        {imageData.map((step, index) => (
+          <div key={step.label}>
+            {Math.abs(activeStep - index) <= 2 ? (
+              <Box
+                component="img"
+                sx={{
+                  maxHeight: "325px",
 
-                    display: "block",
-                    // overflow: "hidden",
-                    width: "100%",
-                    borderRadius: "20px",
-                    aspectRatio: "16/9",
-                    objectFit: "cover",
-                  }}
-                  src={step.image}
-                />
-              ) : null}
-            </div>
-          ))}
-        </AutoplayCarousels>
+                  display: "block",
+                  // overflow: "hidden",
+                  width: "100%",
+                  borderRadius: "20px",
+                  aspectRatio: "16/9",
+                  objectFit: "cover",
+                }}
+                src={step.image}
+              />
+            ) : null}
+          </div>
+        ))}
+        {/* </AutoplayCarousels> */}
         <MobileStepper
           steps={maxSteps}
           position="static"

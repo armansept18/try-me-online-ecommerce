@@ -15,7 +15,6 @@ import { useEffect, useState } from "react";
 import { api } from "../../api/axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { InvoiceModal } from "../../components/modal/invoice";
 import {
   AddressNotSelected,
   ErrorCartEmpty,
